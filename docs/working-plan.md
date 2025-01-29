@@ -41,21 +41,21 @@ This document outlines the implementation plan for the D&D character generator R
 
 ### Core Implementation
 
-#### Database & Models
+#### Database & Models ✓
 
-- [ ] Generate Character model with:
-  - [ ] name (string)
-  - [ ] class_type (string)
-  - [ ] level (integer)
-  - [ ] background (rich_text)
-  - [ ] alignment (string)
-  - [ ] ability_scores (jsonb)
-  - [ ] personality_traits (jsonb)
-  - [ ] equipment (jsonb)
-  - [ ] spells (jsonb)
-- [ ] Add model validations
-- [ ] Add game mechanics methods
-- [ ] Setup ActionText for background
+- [x] Generate Character model with:
+  - [x] name (string)
+  - [x] class_type (string)
+  - [x] level (integer)
+  - [x] background (rich_text)
+  - [x] alignment (string)
+  - [x] ability_scores (jsonb)
+  - [x] personality_traits (jsonb)
+  - [x] equipment (jsonb)
+  - [x] spells (jsonb)
+- [x] Add model validations
+- [x] Add game mechanics methods
+- [x] Setup ActionText for background
 
 #### Controllers & Views
 

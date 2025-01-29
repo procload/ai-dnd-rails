@@ -1,0 +1,45 @@
+<div id="<%= dom_id(character) %>" class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 sm:px-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">
+      <%= character.name %>
+    </h3>
+    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+      Level <%= character.level %> <%= character.class_type %> (<%= character.alignment %>)
+    </p>
+  </div>
+
+  <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+    <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+      <div class="sm:col-span-1">
+        <dt class="text-sm font-medium text-gray-500">Hit Points</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= character.hit_points %></dd>
+      </div>
+
+      <div class="sm:col-span-1">
+        <dt class="text-sm font-medium text-gray-500">Armor Class</dt>
+        <dd class="mt-1 text-sm text-gray-900"><%= character.armor_class %></dd>
+      </div>
+
+      <div class="sm:col-span-1">
+        <dt class="text-sm font-medium text-gray-500">Proficiency Bonus</dt>
+        <dd class="mt-1 text-sm text-gray-900">+<%= character.proficiency_bonus %></dd>
+      </div>
+
+      <div class="sm:col-span-2">
+        <dt class="text-sm font-medium text-gray-500">Background</dt>
+        <dd class="mt-1 text-sm text-gray-900">
+          <%= character.background %>
+        </dd>
+      </div>
+
+      <div class="sm:col-span-2">
+        <dt class="text-sm font-medium text-gray-500">Actions</dt>
+        <dd class="mt-1 space-x-2">
+          <%= link_to "Edit", edit_character_path(character), class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+          <%= button_to "Delete", character_path(character), method: :delete, class: "inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+          <%= button_to "Generate Background", generate_background_character_path(character), class: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div> 
