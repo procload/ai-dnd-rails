@@ -57,16 +57,28 @@ This document outlines the implementation plan for the D&D character generator R
 - [x] Add game mechanics methods
 - [x] Setup ActionText for background
 
-#### Controllers & Views
+#### Controllers & Views ✓
 
-- [ ] Generate CharactersController
-- [ ] Implement CRUD actions
-- [ ] Create character form views
-- [ ] Setup Turbo Stream templates
-- [ ] Create character sheet partial
-- [ ] Create ability scores partial
-- [ ] Create available actions partial
-- [ ] Setup background generation view
+- [x] Generate CharactersController
+- [x] Implement CRUD actions
+- [x] Create character form views
+- [x] Setup Turbo Stream templates
+- [x] Create character sheet partial
+- [x] Create ability scores partial
+- [x] Create available actions partial
+- [x] Setup background generation view
+
+#### LLM Service Prototyping
+
+- [ ] Create mock JSON data structure for:
+  - [ ] Character backgrounds
+  - [ ] Personality traits
+  - [ ] Equipment suggestions
+  - [ ] Spell recommendations
+- [ ] Add sample responses in `/mock` directory
+- [ ] Create prototype service class using mock data
+- [ ] Implement background generation with mock data
+- [ ] Test Turbo Stream updates with mock responses
 
 #### LLM Integration
 
@@ -82,6 +94,53 @@ This document outlines the implementation plan for the D&D character generator R
 - [ ] Setup WebSocket connection
 - [ ] Implement real-time character updates
 - [ ] Add background generation streaming
+
+### UI Theme Implementation
+
+#### Theme Setup & Configuration
+
+- [ ] Install and configure Tailwind UI components
+- [ ] Setup custom color palette based on D&D themes:
+  - Primary: Deep purple (#7C3AED) for arcane elements
+  - Secondary: Warm gold (#B45309) for medieval aesthetics
+  - Accent: Forest green (#065F46) for nature elements
+  - Neutral: Stone gray (#1C1917) for UI elements
+- [ ] Configure dark mode support
+- [ ] Setup responsive breakpoints
+
+#### Layout Components
+
+- [ ] Implement sidebar navigation with collapsible sections
+- [ ] Create header with character quick actions
+- [ ] Design card-based character sheet layout
+- [ ] Add loading states and transitions
+
+#### UI Components
+
+- [ ] Style form inputs and buttons
+- [ ] Create tabbed interfaces for character sections
+- [ ] Design stat blocks with hover effects
+- [ ] Implement tooltips for game mechanics
+- [ ] Add progress indicators for character creation
+- [ ] Style notification system for LLM responses
+
+#### Character Sheet Design
+
+- [ ] Create grid layout for ability scores
+- [ ] Design expandable sections for:
+  - Equipment
+  - Spells
+  - Features
+  - Background
+- [ ] Add interactive dice rolling animations
+- [ ] Implement print-friendly styles
+
+#### Responsive Design
+
+- [ ] Optimize layout for mobile devices
+- [ ] Create collapsible navigation for small screens
+- [ ] Ensure touch-friendly interface elements
+- [ ] Test and adjust for various screen sizes
 
 ### Testing & Documentation
 
