@@ -86,7 +86,7 @@ class CharactersController < ApplicationController
       :level, 
       :alignment, 
       :background, 
-      ability_scores: ABILITIES,
+      ability_scores: Character::ABILITIES,
       personality_traits: [],
       equipment: [],
       spells: []

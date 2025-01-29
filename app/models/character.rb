@@ -14,26 +14,35 @@ class Character < ApplicationRecord
   # Enables rich text editing for character backgrounds
   has_rich_text :background
 
+  # Initialize ability scores if they're nil
+  after_initialize :set_default_values, if: :new_record?
+
   # Game mechanics expressed as clear, focused methods
   def proficiency_bonus
     ((level - 1) / 4) + 2
   end
 
   def ability_modifier(ability)
-    score = ability_scores[ability.to_s]
+    scores = ability_scores || {}
+    score = scores[ability.to_s].to_i
     (score - 10) / 2
   end
 
   # Complex game rules broken down into readable Ruby code
   def armor_class
-    base = equipment.find { |item| item['type'] == 'armor' }&.dig('ac') || 10
+    base = 10  # Default AC without armor
+    armor = (equipment || []).find { |item| item['type'] == 'armor' }
+    base = armor['ac'] if armor
     base + ability_modifier(:dexterity)
   end
 
   def hit_points
+    return 0 unless class_type.present?
+    
     hit_die = CLASS_HIT_DICE[class_type]
     base = hit_die + ability_modifier(:constitution)
-    base + ((level - 1) * (hit_die / 2 + 1))
+    level_bonus = ((level || 1) - 1) * ((hit_die / 2) + 1)
+    base + level_bonus
   end
 
   def generate_background
@@ -46,6 +55,13 @@ class Character < ApplicationRecord
   end
 
   private
+
+  def set_default_values
+    self.ability_scores ||= ABILITIES.each_with_object({}) { |ability, scores| scores[ability] = 10 }
+    self.equipment ||= []
+    self.personality_traits ||= []
+    self.spells ||= []
+  end
 
   # Simple, focused prompt generation for the LLM
   def character_prompt

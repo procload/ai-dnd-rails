@@ -37,11 +37,14 @@
     </div>
 
     <div class="space-y-2">
-      <%= form.label :ability_scores, class: "block text-sm font-medium text-gray-700" %>
+      <span class="block text-sm font-medium text-gray-700">Ability Scores</span>
       <% Character::ABILITIES.each do |ability| %>
         <div class="flex items-center space-x-2">
-          <%= form.label "ability_scores[#{ability}]", ability.titleize, class: "w-24 text-sm text-gray-600" %>
-          <%= form.number_field "ability_scores[#{ability}]", in: 3..18, class: "w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+          <label class="w-24 text-sm text-gray-600"><%= ability.titleize %></label>
+          <input type="number" name="character[ability_scores][<%= ability %>]" 
+                 value="<%= character.ability_scores&.dig(ability) %>"
+                 min="3" max="18"
+                 class="w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
         </div>
       <% end %>
     </div>
