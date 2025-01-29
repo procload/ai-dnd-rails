@@ -15,7 +15,7 @@ A Ruby on Rails 8 application for generating Dungeons & Dragons characters. This
 
    ```bash
    git clone https://github.com/yourusername/dnd-rails.git
-   cd dnd-rails/rails-app
+   cd dnd-rails
    ```
 
 2. Install dependencies:
@@ -40,9 +40,12 @@ A Ruby on Rails 8 application for generating Dungeons & Dragons characters. This
 
 ## Project Structure
 
-- `/rails-app` - The main Rails application
-- `/articles` - Blog post content and documentation
-- `/docs` - Additional documentation and planning
+- `/app` - Application code (models, views, controllers)
+- `/config` - Configuration files
+- `/db` - Database migrations and schema
+- `/docs` - Documentation and blog posts
+  - `/docs/articles` - Blog post content
+  - `/docs/working-plan.md` - Implementation plan
 
 ## Features
 
