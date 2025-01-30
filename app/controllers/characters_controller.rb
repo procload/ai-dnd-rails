@@ -20,18 +20,19 @@ class CharactersController < ApplicationController
 
     respond_to do |format|
       if @character.save
-        format.turbo_stream {
-          render turbo_stream: [
-            turbo_stream.replace("character_sheet", partial: "characters/sheet", locals: { character: @character }),
-            turbo_stream.update("background_section", partial: "characters/generating_background"),
-            turbo_stream.replace("ability_scores", partial: "characters/ability_scores", locals: { character: @character }),
-            turbo_stream.update("character_actions", partial: "characters/available_actions", locals: { character: @character })
-          ]
+        format.turbo_stream { 
+          redirect_to character_path(@character), notice: "Character was successfully created."
         }
-        format.html { redirect_to @character, notice: "Character was successfully created." }
+        format.html { redirect_to character_path(@character), notice: "Character was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("character_form", partial: "form", locals: { character: @character }) }
+        format.turbo_stream { 
+          render turbo_stream: turbo_stream.replace(
+            "character_form", 
+            partial: "form", 
+            locals: { character: @character }
+          )
+        }
       end
     end
   end
@@ -39,16 +40,17 @@ class CharactersController < ApplicationController
   def update
     respond_to do |format|
       if @character.update(character_params)
-        format.turbo_stream {
-          render turbo_stream: [
-            turbo_stream.replace("character_sheet", partial: "characters/sheet", locals: { character: @character }),
-            turbo_stream.replace("ability_scores", partial: "characters/ability_scores", locals: { character: @character })
-          ]
-        }
         format.html { redirect_to @character, notice: "Character was successfully updated." }
+        format.turbo_stream { redirect_to @character, notice: "Character was successfully updated." }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("character_form", partial: "form", locals: { character: @character }) }
+        format.turbo_stream { 
+          render turbo_stream: turbo_stream.replace(
+            "character_form", 
+            partial: "form", 
+            locals: { character: @character }
+          )
+        }
       end
     end
   end
@@ -63,13 +65,21 @@ class CharactersController < ApplicationController
   end
 
   def generate_background
+    Rails.logger.debug "Starting generate_background for character #{@character.id}"
     @character.generate_background
+    Rails.logger.debug "Background generated, personality_traits: #{@character.personality_traits.inspect}"
+    Rails.logger.debug "Background text: #{@character.background.to_plain_text}"
     
     respond_to do |format|
-      format.turbo_stream {
-        render turbo_stream: turbo_stream.update("background_section", 
-          partial: "characters/generating_background")
-      }
+      format.turbo_stream do
+        Rails.logger.debug "Rendering Turbo Stream response"
+        render turbo_stream: turbo_stream.replace(
+          "background_section",
+          partial: "characters/background",
+          locals: { character: @character }
+        )
+      end
+      format.html { redirect_to @character }
     end
   end
 
@@ -85,11 +95,8 @@ class CharactersController < ApplicationController
       :class_type, 
       :level, 
       :alignment, 
-      :background, 
-      ability_scores: Character::ABILITIES,
-      personality_traits: [],
-      equipment: [],
-      spells: []
+      :background,
+      ability_scores: Character::ABILITIES
     )
   end
 end

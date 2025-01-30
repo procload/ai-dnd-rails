@@ -1,0 +1,111 @@
+{
+  "equipment_suggestions": [
+    {
+      "class_type": "Barbarian",
+      "level": 5,
+      "equipment": [
+        {
+          "name": "Ancestral Greataxe",
+          "type": "weapon",
+          "damage": "1d12",
+          "properties": ["heavy", "two-handed"]
+        },
+        {
+          "name": "Handcrafted Throwing Axes (2)",
+          "type": "weapon",
+          "damage": "1d6",
+          "properties": ["thrown", "light"]
+        },
+        {
+          "name": "Scale Mail",
+          "type": "armor",
+          "ac": 14,
+          "properties": ["medium"]
+        },
+        {
+          "name": "Tribal Totem",
+          "type": "trinket",
+          "description": "A carved wooden totem that glows faintly during rage"
+        },
+        {
+          "name": "Explorer's Pack",
+          "type": "gear",
+          "contents": [
+            "bedroll",
+            "tinderbox",
+            "torches",
+            "rations",
+            "waterskin"
+          ]
+        }
+      ]
+    },
+    {
+      "class_type": "Wizard",
+      "level": 5,
+      "equipment": [
+        {
+          "name": "Ornate Quarterstaff",
+          "type": "weapon",
+          "damage": "1d6",
+          "properties": ["versatile", "arcane focus"]
+        },
+        {
+          "name": "Enchanted Spellbook",
+          "type": "focus",
+          "description": "A leather-bound tome with silver runes"
+        },
+        {
+          "name": "Component Pouch",
+          "type": "focus",
+          "contents": ["bat guano", "sulfur", "copper wire", "crystals"]
+        },
+        {
+          "name": "Scholar's Pack",
+          "type": "gear",
+          "contents": ["ink", "quill", "parchment", "sand", "small knife"]
+        },
+        {
+          "name": "Apprentice Robes",
+          "type": "armor",
+          "ac": 11,
+          "properties": ["light"]
+        }
+      ]
+    },
+    {
+      "class_type": "Rogue",
+      "level": 5,
+      "equipment": [
+        {
+          "name": "Shadowsteel Daggers (2)",
+          "type": "weapon",
+          "damage": "1d4",
+          "properties": ["finesse", "light", "thrown"]
+        },
+        {
+          "name": "Hand Crossbow",
+          "type": "weapon",
+          "damage": "1d6",
+          "properties": ["ammunition", "light", "loading"]
+        },
+        {
+          "name": "Studded Leather",
+          "type": "armor",
+          "ac": 12,
+          "properties": ["light"]
+        },
+        {
+          "name": "Thieves' Tools",
+          "type": "tool",
+          "description": "Fine tools for picking locks and disarming traps"
+        },
+        {
+          "name": "Burglar's Pack",
+          "type": "gear",
+          "contents": ["crowbar", "dark clothes", "grappling hook", "rope"]
+        }
+      ]
+    }
+  ]
+}

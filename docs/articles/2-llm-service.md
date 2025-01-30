@@ -7,6 +7,14 @@
 - The challenge of LLM integration
 - Why service objects matter
 - Rails' role in managing complexity
+- Evolution from mock services to production
+
+### From Mock to Production
+
+- Analyzing our MockLlmService implementation
+- Identifying the core interface
+- Maintaining compatibility during transition
+- Testing strategies for both implementations
 
 ### The Foundation: Service Architecture
 
@@ -47,16 +55,19 @@ end
 ### Provider Implementation
 
 - Base provider class
-- Specific provider implementations
+- Specific provider implementations (Anthropic, OpenAI)
 - Rate limiting and quotas
 - Error handling and retries
+- Fallback strategies
 
 ### Real-World Integration
 
-- Using the service in our character generator
-- Background job processing
-- Streaming responses
-- Error recovery
+- Converting from synchronous to asynchronous processing
+- Background job implementation
+- Streaming responses through Turbo
+- Managing job queues and concurrency
+- Error recovery and retry mechanisms
+- Handling timeouts and partial responses
 
 ### Testing Strategies
 
@@ -64,6 +75,7 @@ end
 - VCR for API testing
 - Error scenarios
 - Performance testing
+- Testing both mock and production implementations
 
 ### Future Considerations
 
@@ -71,5 +83,6 @@ end
 - Versioning considerations
 - Performance optimization
 - Scaling patterns
+- Cost management and monitoring
 
-This article will serve as a crucial foundation for the rest of the series, establishing patterns we'll use throughout our character generator implementation.
+This article builds directly on our mock service implementation from Article 1, showing how to evolve our prototype into a production-ready system while maintaining the simplicity and clarity that Rails encourages.

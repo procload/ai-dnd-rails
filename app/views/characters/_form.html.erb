@@ -1,56 +1,124 @@
-<%= form_with(model: character, class: "space-y-6") do |form| %>
-  <% if character.errors.any? %>
-    <div class="bg-red-50 p-4 rounded-lg">
-      <h2 class="text-red-900 font-medium"><%= pluralize(character.errors.count, "error") %> prohibited this character from being saved:</h2>
-      <ul class="list-disc list-inside text-red-800">
-        <% character.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with(model: character, id: "character_form") do |form| %>
+  <div class="max-w-5xl mx-auto">
+    <!-- Main Character Card -->
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+      <!-- Header -->
+      <div class="bg-indigo-600 px-6 py-4">
+        <h3 class="text-xl font-semibold text-white">
+          <%= character.persisted? ? "Edit Character" : "New Character" %>
+        </h3>
+        <p class="text-indigo-100 text-sm">
+          Enter your character's information below
+        </p>
+      </div>
 
-  <div class="space-y-4">
-    <div>
-      <%= form.label :name, class: "block text-sm font-medium text-gray-700" %>
-      <%= form.text_field :name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
-    </div>
+      <!-- Form Content -->
+      <div class="px-6 py-6">
+        <div class="space-y-8">
+          <!-- Character Information Section -->
+          <div>
+            <h2 class="text-lg font-medium text-gray-900">Character Information</h2>
+            <p class="mt-1 text-sm text-gray-500">Enter the basic details of your character.</p>
 
-    <div>
-      <%= form.label :class_type, class: "block text-sm font-medium text-gray-700" %>
-      <%= form.select :class_type, Character::CLASSES, {}, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
-    </div>
+            <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
+              <!-- Name Field -->
+              <div class="sm:col-span-4">
+                <%= form.label :name, class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= form.text_field :name, 
+                    class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-3 px-4",
+                    placeholder: "Enter character name" %>
+                <% character.errors.full_messages_for(:name).each do |message| %>
+                  <p class="mt-2 text-sm text-red-600"><%= message %></p>
+                <% end %>
+              </div>
 
-    <div>
-      <%= form.label :level, class: "block text-sm font-medium text-gray-700" %>
-      <%= form.number_field :level, in: 1..20, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
-    </div>
+              <!-- Class Type Field -->
+              <div class="sm:col-span-3">
+                <%= form.label :class_type, class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= form.select :class_type, 
+                    Character::CLASSES,
+                    { prompt: "Select class" },
+                    class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-3 px-4" %>
+                <% character.errors.full_messages_for(:class_type).each do |message| %>
+                  <p class="mt-2 text-sm text-red-600"><%= message %></p>
+                <% end %>
+              </div>
 
-    <div>
-      <%= form.label :alignment, class: "block text-sm font-medium text-gray-700" %>
-      <%= form.select :alignment, Character::ALIGNMENTS, {}, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
-    </div>
+              <!-- Level Field -->
+              <div class="sm:col-span-3">
+                <%= form.label :level, class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= form.number_field :level, 
+                    min: 1, 
+                    max: 20,
+                    class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-3 px-4",
+                    placeholder: "1-20" %>
+                <% character.errors.full_messages_for(:level).each do |message| %>
+                  <p class="mt-2 text-sm text-red-600"><%= message %></p>
+                <% end %>
+              </div>
 
-    <div>
-      <%= form.label :background, class: "block text-sm font-medium text-gray-700" %>
-      <%= form.rich_text_area :background, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
-    </div>
+              <!-- Alignment Field -->
+              <div class="sm:col-span-3">
+                <%= form.label :alignment, class: "block text-sm font-medium text-gray-700 mb-1" %>
+                <%= form.select :alignment, 
+                    Character::ALIGNMENTS,
+                    { prompt: "Select alignment" },
+                    class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-3 px-4" %>
+                <% character.errors.full_messages_for(:alignment).each do |message| %>
+                  <p class="mt-2 text-sm text-red-600"><%= message %></p>
+                <% end %>
+              </div>
+            </div>
+          </div>
 
-    <div class="space-y-2">
-      <span class="block text-sm font-medium text-gray-700">Ability Scores</span>
-      <% Character::ABILITIES.each do |ability| %>
-        <div class="flex items-center space-x-2">
-          <label class="w-24 text-sm text-gray-600"><%= ability.titleize %></label>
-          <input type="number" name="character[ability_scores][<%= ability %>]" 
-                 value="<%= character.ability_scores&.dig(ability) %>"
-                 min="3" max="18"
-                 class="w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+          <!-- Ability Scores Section -->
+          <div>
+            <h2 class="text-lg font-medium text-gray-900">Ability Scores</h2>
+            <p class="mt-1 text-sm text-gray-500">Set your character's core abilities.</p>
+
+            <div class="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-3">
+              <% Character::ABILITIES.each do |ability| %>
+                <div class="relative">
+                  <%= form.label "ability_scores[#{ability}]", ability.titleize, class: "block text-sm font-medium text-gray-700 mb-1" %>
+                  <div class="relative">
+                    <%= form.number_field "ability_scores[#{ability}]", 
+                        value: character.ability_scores&.dig(ability) || 10,
+                        min: 1,
+                        max: 20,
+                        class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-3 px-4 text-center",
+                        placeholder: "10" %>
+                    <span class="absolute inset-y-0 right-3 flex items-center text-sm text-gray-500">
+                      (<%= character.ability_modifier(ability) %>)
+                    </span>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- Background Section -->
+          <div>
+            <h2 class="text-lg font-medium text-gray-900">Character Background</h2>
+            <p class="mt-1 text-sm text-gray-500">Tell us about your character's story.</p>
+
+            <div class="mt-6">
+              <%= form.rich_text_area :background, 
+                  class: "block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base min-h-[200px] prose max-w-none",
+                  placeholder: "Write your character's background story..." %>
+              <% character.errors.full_messages_for(:background).each do |message| %>
+                <p class="mt-2 text-sm text-red-600"><%= message %></p>
+              <% end %>
+            </div>
+          </div>
         </div>
-      <% end %>
-    </div>
-  </div>
+      </div>
 
-  <div class="mt-6">
-    <%= form.submit class: "inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" %>
+      <!-- Form Actions -->
+      <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+        <%= link_to "Cancel", characters_path, 
+            class: "inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        <%= form.submit class: "inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      </div>
+    </div>
   </div>
 <% end %> 

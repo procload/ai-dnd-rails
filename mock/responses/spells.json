@@ -1,0 +1,104 @@
+{
+  "spell_suggestions": [
+    {
+      "class_type": "Wizard",
+      "level": 5,
+      "cantrips": [
+        {
+          "name": "Fire Bolt",
+          "level": 0,
+          "school": "Evocation",
+          "casting_time": "1 action",
+          "range": "120 feet"
+        },
+        {
+          "name": "Mage Hand",
+          "level": 0,
+          "school": "Conjuration",
+          "casting_time": "1 action",
+          "range": "30 feet"
+        },
+        {
+          "name": "Prestidigitation",
+          "level": 0,
+          "school": "Transmutation",
+          "casting_time": "1 action",
+          "range": "10 feet"
+        }
+      ],
+      "level_1_spells": [
+        {
+          "name": "Shield",
+          "level": 1,
+          "school": "Abjuration",
+          "casting_time": "1 reaction",
+          "duration": "1 round"
+        },
+        {
+          "name": "Magic Missile",
+          "level": 1,
+          "school": "Evocation",
+          "casting_time": "1 action",
+          "range": "120 feet"
+        },
+        {
+          "name": "Detect Magic",
+          "level": 1,
+          "school": "Divination",
+          "casting_time": "1 action",
+          "duration": "Concentration, up to 10 minutes"
+        }
+      ]
+    },
+    {
+      "class_type": "Cleric",
+      "level": 5,
+      "cantrips": [
+        {
+          "name": "Sacred Flame",
+          "level": 0,
+          "school": "Evocation",
+          "casting_time": "1 action",
+          "range": "60 feet"
+        },
+        {
+          "name": "Light",
+          "level": 0,
+          "school": "Evocation",
+          "casting_time": "1 action",
+          "range": "Touch"
+        },
+        {
+          "name": "Spare the Dying",
+          "level": 0,
+          "school": "Necromancy",
+          "casting_time": "1 action",
+          "range": "Touch"
+        }
+      ],
+      "level_1_spells": [
+        {
+          "name": "Cure Wounds",
+          "level": 1,
+          "school": "Evocation",
+          "casting_time": "1 action",
+          "range": "Touch"
+        },
+        {
+          "name": "Bless",
+          "level": 1,
+          "school": "Enchantment",
+          "casting_time": "1 action",
+          "duration": "Concentration, up to 1 minute"
+        },
+        {
+          "name": "Shield of Faith",
+          "level": 1,
+          "school": "Abjuration",
+          "casting_time": "1 bonus action",
+          "duration": "Concentration, up to 10 minutes"
+        }
+      ]
+    }
+  ]
+}

@@ -24,6 +24,7 @@ Key Code Implementations:
 
 ### Article 2: The Art of LLM Services in Rails [⚡ Next Up]
 
+- Evolution from mock services to production
 - Why service objects shine for LLM integration
 - Building a flexible provider system
   ```ruby
@@ -63,7 +64,16 @@ Key Code Implementations:
 - Error handling and retries
 - Rate limiting and quotas
 - Testing strategies
-- Expanding on the background generation system introduced in Article 1
+- Converting synchronous to asynchronous processing
+
+Key Code Implementations:
+
+- Full LLMService architecture
+- Provider abstraction system
+- Mock-to-production transition
+- Background job processing
+- Streaming response handling
+- Error recovery and retry mechanisms
 
 ### Article 3: Rails 8's Modern Features
 

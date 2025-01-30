@@ -1,0 +1,42 @@
+<div id="background_section" class="mt-6">
+  <div class="bg-white shadow rounded-lg p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">Character Background</h3>
+    
+    <div class="prose max-w-none mb-6">
+      <%= character.background %>
+    </div>
+
+    <% if character.personality_traits.present? %>
+      <div class="mt-6">
+        <h4 class="text-md font-medium text-gray-900 mb-2">Personality Traits</h4>
+        <ul class="list-disc list-inside space-y-2">
+          <% character.personality_traits.each do |trait| %>
+            <li class="text-gray-700"><%= trait %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mt-6" data-controller="loading">
+      <%= form_with url: generate_background_character_path(character), 
+                    data: { 
+                      turbo: true,
+                      action: "turbo:submit-start->loading#start turbo:submit-end->loading#end turbo:submit-error->loading#error"
+                    } do |f| %>
+        <button type="submit"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                data-loading-target="button">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" 
+               xmlns="http://www.w3.org/2000/svg" 
+               fill="none" 
+               viewBox="0 0 24 24"
+               data-loading-target="spinner">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Generate New Background
+        </button>
+      <% end %>
+    </div>
+  </div>
+</div> 

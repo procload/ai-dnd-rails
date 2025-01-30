@@ -1,0 +1,114 @@
+{
+  "backgrounds": [
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "Raised in a remote village, they discovered their calling after defending their home from bandits. The experience taught them that everyone has untapped potential waiting to be unleashed.",
+      "personality_traits": [
+        "Believes in standing up for the underdog",
+        "Values community above all",
+        "Shares wisdom from their village",
+        "Faces challenges head-on"
+      ]
+    },
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "A former scholar who left their comfortable life after uncovering ancient texts that hinted at greater purpose. Their academic background brings a thoughtful approach to their adventures.",
+      "personality_traits": [
+        "Takes detailed notes of their travels",
+        "Analyzes situations carefully",
+        "Shares knowledge freely",
+        "Questions traditional assumptions"
+      ]
+    },
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "Once a city guard who witnessed too much corruption, they now seek to make a difference on their own terms. Their experience with both law enforcement and its failures shapes their worldview.",
+      "personality_traits": [
+        "Looks out for common folk",
+        "Distrusts authority figures",
+        "Gives second chances",
+        "Remembers both friends and enemies"
+      ]
+    },
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "Born into a merchant family, they chose adventure over inheritance. Their trading background gives them a knack for negotiation and reading people.",
+      "personality_traits": [
+        "Drives a hard bargain",
+        "Maintains a wide network",
+        "Knows the value of information",
+        "Keeps their word in deals"
+      ]
+    },
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "Survived a catastrophic event that destroyed their hometown, leading them to seek both answers and the power to prevent such tragedies. Their past drives them to protect others.",
+      "personality_traits": [
+        "Protective of their companions",
+        "Prepares for the worst",
+        "Appreciates life's small joys",
+        "Never leaves anyone behind"
+      ]
+    },
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "Raised by wandering performers, they learned that life's greatest adventures come from taking chances. Their unconventional upbringing gives them unique perspectives on problems.",
+      "personality_traits": [
+        "Thinks outside the box",
+        "Makes friends easily",
+        "Enjoys a good performance",
+        "Adapts to any situation"
+      ]
+    },
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "A former apprentice who discovered their true calling after a chance encounter with an adventuring party. Their crafting background gives them practical problem-solving skills.",
+      "personality_traits": [
+        "Fixes things others would discard",
+        "Values quality workmanship",
+        "Sees potential in everything",
+        "Plans projects carefully"
+      ]
+    },
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "Descended from a long line of heroes, they initially rejected their heritage but eventually embraced their destiny on their own terms. Their family legacy brings both burden and pride.",
+      "personality_traits": [
+        "Forges their own path",
+        "Respects tradition selectively",
+        "Proves themselves through actions",
+        "Protects family reputation"
+      ]
+    },
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "Found and raised by druids after being orphaned, they bridge the gap between civilization and nature. Their unique upbringing helps them see multiple sides of every situation.",
+      "personality_traits": [
+        "Finds beauty in wild places",
+        "Mediates conflicts naturally",
+        "Respects natural cycles",
+        "Helps others find balance"
+      ]
+    },
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "A former sailor who traveled the world before finding their true purpose. Their experiences at sea taught them about teamwork, danger, and the importance of reliable companions.",
+      "personality_traits": [
+        "Works well in a crew",
+        "Watches the weather",
+        "Knows distant customs",
+        "Values loyalty highly"
+      ]
+    }
+  ]
+}

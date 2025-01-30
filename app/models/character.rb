@@ -14,8 +14,9 @@ class Character < ApplicationRecord
   # Enables rich text editing for character backgrounds
   has_rich_text :background
 
-  # Initialize ability scores if they're nil
+  # Initialize default values for new records
   after_initialize :set_default_values, if: :new_record?
+  before_save :ensure_arrays_initialized
 
   # Game mechanics expressed as clear, focused methods
   def proficiency_bonus
@@ -46,11 +47,16 @@ class Character < ApplicationRecord
   end
 
   def generate_background
-    # Offload LLM processing to a background job to keep the UI responsive
-    GenerateBackgroundJob.perform_later(
-      id,
-      messages: character_prompt,
-      system_prompt: background_guidelines
+    # Generate background synchronously
+    mock_data = MockLlmService.generate_background(self)
+    
+    # Clear the existing background to ensure it's properly replaced
+    self.background = nil
+    
+    # Update with new content
+    update!(
+      background: mock_data[:background],
+      personality_traits: mock_data[:personality_traits]
     )
   end
 
@@ -58,13 +64,36 @@ class Character < ApplicationRecord
 
   def set_default_values
     self.ability_scores ||= ABILITIES.each_with_object({}) { |ability, scores| scores[ability] = 10 }
-    self.equipment ||= []
+    
+    # Use MockLlmService to generate initial data
+    mock_data = MockLlmService.generate_background(self)
+    self.background = mock_data[:background]
+    self.personality_traits = mock_data[:personality_traits]
+    
+    # Generate equipment using MockLlmService
+    self.equipment = MockLlmService.suggest_equipment(self)
+    
+    # Generate spells using MockLlmService if applicable
+    if ['Wizard', 'Sorcerer', 'Warlock', 'Bard', 'Cleric', 'Druid'].include?(class_type)
+      spell_data = MockLlmService.suggest_spells(self)
+      self.spells = (spell_data[:cantrips] || []) + (spell_data[:level_1_spells] || [])
+    else
+      self.spells = []
+    end
+  end
+
+  def ensure_arrays_initialized
     self.personality_traits ||= []
+    self.equipment ||= []
     self.spells ||= []
   end
 
   # Simple, focused prompt generation for the LLM
   def character_prompt
     "Create a compelling backstory for #{name}, a level #{level} #{class_type} with #{alignment} alignment."
+  end
+
+  def background_guidelines
+    "Generate a character background that includes their origin, motivation, and key life events."
   end
 end

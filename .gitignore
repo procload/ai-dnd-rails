@@ -9,6 +9,8 @@
 
 # Ignore all environment files.
 /.env*
+.env.local
+.env.*.local
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -32,6 +34,53 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/config/credentials/*.key
 
+# Ignore asset pipeline cache
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Documentation and working files
+/docs/working-plan.md
+/docs/private/
+/docs/drafts/
+/docs/articles/*.draft.md
+/docs/articles/*.private.md
+/docs/articles/@*.md
+.obsidian/
+.vscode/
+.idea/
+
+# Node modules and Yarn files
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+# Test coverage
+/coverage/
+.nyc_output/
+
+# Database backups and dumps
+*.dump
+*.sql
+/db/backups/
+
+# API keys and secrets
+*.pem
+*.key
+*.cert
+/config/secrets/
+
+# System files
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# Local development files
+/local/
+TODO.md
+NOTES.md
+*.local.*

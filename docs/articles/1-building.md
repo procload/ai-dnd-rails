@@ -18,7 +18,7 @@ Unpopular opinion: The AI revolution doesn't need your JavaScript framework.
 
 Kicking off a series exploring how "boring" technology might be the secret weapon for generative AI apps. We're building a D&D character generator with Rails because its conventions, server-rendered HTML, and battle-tested patterns are surprisingly perfect for the AI era.
 
-Part 1 questions why we traded simple for complex right when AI streaming makes the server more relevant than ever. Rails' "boring" choices - consistent conventions, HTML over JSON, predictable file structure - turn out to be exactly what we need for LLM integration.
+Part 1 questions why we traded simple for complex right when AI streaming makes the server more relevant than ever. Rails' "boring" choices - consistent conventions, HTML over JSON, predictable file structure - tugtigq rn out to be exactly what we need for LLM integration.
 
 The tech industry keeps adding layers of complexity while Rails quietly evolves its proven foundations. Sometimes the best way forward is to question why we abandoned what worked.
 
@@ -97,24 +97,29 @@ This generator creates a standardized model structure that both humans and LLMs 
 The model implementation demonstrates how Rails conventions naturally express domain rules:
 
 ```ruby
+# Character model demonstrates Rails' elegant expression of game mechanics
 class Character < ApplicationRecord
-  # Game constants defined at the class level for easy reference and validation
+  # Game constants defined at class level for easy reference and validation
   CLASSES = %w[Barbarian Bard Cleric Druid Fighter Monk Paladin Ranger Rogue Sorcerer Warlock Wizard].freeze
-  ALIGNMENTS = ['Lawful Good', 'Neutral Good', 'Chaotic Good', 'Lawful Neutral', 'True Neutral', 'Chaotic Neutral', 'Lawful Evil', 'Neutral Evil', 'Chaotic Evil'].freeze
+  ALIGNMENTS = ['Lawful Good', 'Neutral Good', 'Chaotic Good', 'Lawful Neutral', 'True Neutral',
+                'Chaotic Neutral', 'Lawful Evil', 'Neutral Evil', 'Chaotic Evil'].freeze
   ABILITIES = %w[strength dexterity constitution intelligence wisdom charisma].freeze
-  CLASS_HIT_DICE = {'Barbarian' => 12, 'Fighter' => 10, 'Paladin' => 10, 'Ranger' => 10, 'Wizard' => 6, 'Sorcerer' => 6, 'Bard' => 8, 'Cleric' => 8, 'Druid' => 8, 'Monk' => 8, 'Rogue' => 8, 'Warlock' => 8}.freeze
+  CLASS_HIT_DICE = {'Barbarian' => 12, 'Fighter' => 10, 'Paladin' => 10, 'Ranger' => 10,
+                    'Wizard' => 6, 'Sorcerer' => 6, 'Bard' => 8, 'Cleric' => 8,
+                    'Druid' => 8, 'Monk' => 8, 'Rogue' => 8, 'Warlock' => 8}.freeze
 
   # Rails validations provide automatic data integrity checks
   validates :name, presence: true
   validates :level, numericality: { in: 1..20 }
-  validates :class_type, inclusion: { in: CLASSES, message: "must be a valid class" }
-  validates :alignment, inclusion: { in: ALIGNMENTS, message: "must be a valid alignment" }
+  validates :class_type, inclusion: { in: CLASSES }
+  validates :alignment, inclusion: { in: ALIGNMENTS }
 
-  # Enables rich text editing for character backgrounds
+  # Rich text enables formatted character backgrounds
   has_rich_text :background
 
   # Initialize default values for new records
   after_initialize :set_default_values, if: :new_record?
+  before_save :ensure_arrays_initialized
 
   # Game mechanics expressed as clear, focused methods
   def proficiency_bonus
@@ -127,30 +132,94 @@ class Character < ApplicationRecord
     (score - 10) / 2
   end
 
-  # Complex game rules broken down into readable Ruby code
-  def armor_class
-    base = 10  # Default AC without armor
-    armor = (equipment || []).find { |item| item['type'] == 'armor' }
-    base = armor['ac'] if armor
-    base + ability_modifier(:dexterity)
-  end
+  # Background generation handled through service object
+  def generate_background
+    # Generate background synchronously for prototype
+    mock_data = MockLlmService.generate_background(self)
 
-  def hit_points
-    return 0 unless class_type.present?
+    # Clear existing background to ensure proper replacement
+    self.background = nil
 
-    hit_die = CLASS_HIT_DICE[class_type]
-    base = hit_die + ability_modifier(:constitution)
-    level_bonus = ((level || 1) - 1) * ((hit_die / 2) + 1)
-    base + level_bonus
+    # Update with new content
+    update!(
+      background: mock_data[:background],
+      personality_traits: mock_data[:personality_traits]
+    )
   end
 
   private
 
   def set_default_values
+    # Initialize ability scores with default values
     self.ability_scores ||= ABILITIES.each_with_object({}) { |ability, scores| scores[ability] = 10 }
-    self.equipment ||= []
+
+    # Generate initial background and traits
+    mock_data = MockLlmService.generate_background(self)
+    self.background = mock_data[:background]
+    self.personality_traits = mock_data[:personality_traits]
+  end
+
+  def ensure_arrays_initialized
     self.personality_traits ||= []
+    self.equipment ||= []
     self.spells ||= []
+  end
+end
+
+# Controller demonstrates Rails' straightforward approach to real-time updates
+class CharactersController < ApplicationController
+  before_action :set_character, only: [:show, :edit, :update, :destroy, :generate_background]
+
+  def update
+    respond_to do |format|
+      if @character.update(character_params)
+        format.turbo_stream {
+          render turbo_stream: [
+            turbo_stream.replace("character_sheet",
+                               partial: "characters/sheet",
+                               locals: { character: @character }),
+            turbo_stream.replace("ability_scores",
+                               partial: "characters/ability_scores",
+                               locals: { character: @character })
+          ]
+        }
+        format.html { redirect_to @character, notice: "Character was successfully updated." }
+      else
+        format.html { render :edit, status: :unprocessable_entity }
+        format.turbo_stream {
+          render turbo_stream: turbo_stream.replace(
+            "character_form",
+            partial: "form",
+            locals: { character: @character }
+          )
+        }
+      end
+    end
+  end
+
+  def generate_background
+    Rails.logger.debug "Starting generate_background for character #{@character.id}"
+    @character.generate_background
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "background_section",
+          partial: "characters/background",
+          locals: { character: @character }
+        )
+      end
+      format.html { redirect_to @character }
+    end
+  end
+
+  private
+
+  def character_params
+    params.require(:character).permit(
+      :name, :class_type, :level, :alignment, :background,
+      ability_scores: Character::ABILITIES
+    )
   end
 end
 ```
@@ -164,29 +233,60 @@ The use of `jsonb` fields for complex data structures like `ability_scores` and 
 Rails 8's Turbo Streams handles real-time updates without complex JavaScript frameworks. The system manages dynamic content through simple, predictable patterns, leveraging Rails 8's enhanced streaming capabilities for improved performance:
 
 ```ruby
+# Controller demonstrates Rails' straightforward approach to real-time updates
 class CharactersController < ApplicationController
-  def create
-    @character = Character.new(character_params)
+  before_action :set_character, only: [:show, :edit, :update, :destroy, :generate_background]
 
+  def update
     respond_to do |format|
-      if @character.save
-        # Turbo Streams enable real-time updates without custom JavaScript
+      if @character.update(character_params)
         format.turbo_stream {
           render turbo_stream: [
-            # Update multiple page elements independently
-            turbo_stream.replace("character_sheet", partial: "characters/sheet", locals: { character: @character }),
-            # Set up background section for streaming LLM content
-            turbo_stream.update("background_section", partial: "characters/generating_background"),
-            # Update character stats in real-time
-            turbo_stream.replace("ability_scores", partial: "characters/ability_scores", locals: { character: @character }),
-            # Refresh available actions based on character state
-            turbo_stream.update("character_actions", partial: "characters/available_actions", locals: { character: @character })
+            turbo_stream.replace("character_sheet",
+                               partial: "characters/sheet",
+                               locals: { character: @character }),
+            turbo_stream.replace("ability_scores",
+                               partial: "characters/ability_scores",
+                               locals: { character: @character })
           ]
         }
+        format.html { redirect_to @character, notice: "Character was successfully updated." }
       else
-        handle_validation_error(format)
+        format.html { render :edit, status: :unprocessable_entity }
+        format.turbo_stream {
+          render turbo_stream: turbo_stream.replace(
+            "character_form",
+            partial: "form",
+            locals: { character: @character }
+          )
+        }
       end
     end
+  end
+
+  def generate_background
+    Rails.logger.debug "Starting generate_background for character #{@character.id}"
+    @character.generate_background
+
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "background_section",
+          partial: "characters/background",
+          locals: { character: @character }
+        )
+      end
+      format.html { redirect_to @character }
+    end
+  end
+
+  private
+
+  def character_params
+    params.require(:character).permit(
+      :name, :class_type, :level, :alignment, :background,
+      ability_scores: Character::ABILITIES
+    )
   end
 end
 ```
@@ -197,29 +297,57 @@ Each `turbo_stream` action targets a specific DOM element, replacing or updating
 
 We'll explore Turbo Streams and LLMs in depth in a future article, examining patterns for streaming token responses, handling partial updates, and managing multiple concurrent generations. The integration between Turbo Streams and LLMs creates some interesting possibilities for real-time AI applications that we'll want to examine carefully.
 
-## The Path Forward
+### Pragmatic Development with Mock Services
 
-Our character generator demonstrates how Rails approaches modern web development through steady evolution. The framework's design encourages pragmatic solutions over unnecessary complexity.
-
-This becomes particularly clear in our LLMService implementation:
+Rails' emphasis on pragmatic development shines in our approach to LLM integration. Rather than immediately tackling the complexities of API integration, we begin with a mock service that demonstrates the intended functionality:
 
 ```ruby
-class Character < ApplicationRecord
-  def generate_background
-    # Offload LLM processing to a background job to keep the UI responsive
-    GenerateBackgroundJob.perform_later(
-      id,
-      messages: character_prompt,
-      system_prompt: background_guidelines
-    )
-  end
+# Mock responses provide a foundation for iterative development
+{
+  "backgrounds": [
+    {
+      "class_type": "ANY",
+      "alignment": "ANY",
+      "background": "Raised in a remote village, they discovered their calling after defending their home from bandits...",
+      "personality_traits": [
+        "Believes in standing up for the underdog",
+        "Values community above all",
+        "Shares wisdom from their village",
+        "Faces challenges head-on"
+      ]
+    }
+  ]
+}
+```
 
-  private
+This approach offers several advantages:
 
-  # Simple, focused prompt generation for the LLM
-  def character_prompt
-    "Create a compelling backstory for #{name}, a level #{level} #{class_type} with #{alignment} alignment."
-  end
+1. Rapid prototyping without external dependencies
+2. Clear contract for the eventual LLM integration
+3. Reliable test data during development
+4. Smooth transition path to production services
+
+### Evolution from Synchronous to Asynchronous Processing
+
+Our initial implementation uses synchronous processing for background generation - a deliberate choice that simplifies early development and testing. Rails' architecture makes it straightforward to evolve this approach as our needs grow:
+
+```ruby
+# Current synchronous implementation
+def generate_background
+  mock_data = MockLlmService.generate_background(self)
+  update!(
+    background: mock_data[:background],
+    personality_traits: mock_data[:personality_traits]
+  )
+end
+
+# Future asynchronous implementation
+def generate_background
+  GenerateBackgroundJob.perform_later(
+    id,
+    messages: character_prompt,
+    system_prompt: background_guidelines
+  )
 end
 
 # Background job for handling LLM interactions
@@ -235,5 +363,7 @@ class GenerateBackgroundJob < ApplicationJob
   end
 end
 ```
+
+This evolution path demonstrates Rails' strength in managing complexity - we can start simple and add sophistication only when needed. When we're ready to integrate real LLM services, ActiveJob and Action Cable provide the tools for background processing and real-time updates without significant architectural changes.
 
 In our next article, we'll examine the LLMService layer. We'll explore how Rails' conventions create a flexible provider system that handles AI integration effectively while maintaining clear, readable code. The framework's straightforward approach to architecture proves especially valuable when working with cutting-edge technologies.
