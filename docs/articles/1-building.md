@@ -1,12 +1,14 @@
 # LinkedIn Posts:
 
-Unpopular opinion: "Boring" technology might be the future of AI applications.
+"Boring" technology might be the future of AI applications.
 
-Starting a series building a D&D character generator that challenges our industry's obsession with complexity. Rails - with its predictable conventions, server-rendered HTML, and focus on simplicity - might be the perfect match for the generative AI era.
+Starting a series building a D&D character generator that challenges our industry's obsession with complexity. Rails - with its predictable conventions, server-rendered HTML, and focus on simplicity - is an excellent match for the generative AI era.
 
-Part 1 examines why an 18-year-old framework handles LLM streaming more elegantly than our modern JavaScript landscapes. Sometimes mature technology beats bleeding edge.
+Rails' established patterns - server-rendered HTML, consistent conventions, and straightforward architecture - align well with the needs of generative AI applications. The framework's steady evolution and focus on simplicity offer some interesting advantages for LLM integration.
 
-The tech industry keeps chasing the new while Rails keeps solving real problems. This series explores why that matters more than ever in the age of AI.
+Part 1 examines how Rails' approach to web development might be particularly relevant in the AI era. While our industry often equates innovation with complexity, there's value in examining proven patterns through this new lens.
+
+Following articles will explore Rails' service architecture for LLMs, real-time updates, and how convention over configuration applies to AI workflows.
 
 [link]
 
