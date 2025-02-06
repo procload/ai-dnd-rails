@@ -12,7 +12,21 @@ Following articles will explore Rails' service architecture for LLMs, real-time 
 
 [link]
 
-# Rails & AI: Building Our Character Generator
+# Your Tech Stack Failed Its Wisdom Save: A Series on Rails, AI, and Simpler Solutions
+
+# Starting a Campaign with Rails & AI: Building a D&D Generator Without the Complexity Tax
+
+# D&D Meets Rails: Building an AI Character Generator to Challenge Web Development Dogma
+
+# Building with Boring Magic: A D&D Character Generator Challenges Modern Web Assumptions
+
+# Rails Rolls Initiative: Starting a Series on Simpler AI Development
+
+# The Tavern Keeper's Guide to Rails: Simple Solutions for Complex AI Problems
+
+# The Rails Artificer's Handbook: Building AI Apps Without Multi-classing into JavaScript Frameworks
+
+# Rails Makes Its Wisdom Save: Why 'Boring' Technology is Winning the AI Campaign
 
 The tech industry has an interesting relationship with complexity. We often reach for intricate solutions when simpler ones might serve better. Modern web development exemplifies this tendency - layers of build tools, state management libraries, and framework abstractions that sometimes feel more like organizational theater than engineering solutions.
 
