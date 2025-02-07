@@ -1,0 +1,8 @@
+{
+  "backgrounds": [
+    {
+      "background": "A test background story",
+      "personality_traits": ["Test trait 1", "Test trait 2"]
+    }
+  ]
+}

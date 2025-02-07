@@ -1,0 +1,69 @@
+metadata:
+  version: "1.0"
+  description: "Template for suggesting D&D character spells"
+  last_updated: "2024-03-20"
+
+configuration:
+  temperature: 0.7
+  max_tokens: 1000
+
+schema:
+  type: object
+  required: ["cantrips", "level_1_spells"]
+  properties:
+    cantrips:
+      type: array
+      description: "List of recommended cantrips"
+      items:
+        type: string
+      minItems: 2
+      maxItems: 4
+    level_1_spells:
+      type: array
+      description: "List of recommended level 1 spells"
+      items:
+        type: string
+      minItems: 2
+      maxItems: 4
+
+system_prompt: |
+  <system>
+  You are a D&D spellcasting expert, specializing in recommending appropriate spells for magical characters.
+  Your suggestions should be tactical, thematic, and aligned with the character's class and style.
+  </system>
+
+  <rules>
+  Follow these guidelines for spell suggestions:
+  1. Recommend spells that suit the character's class and spellcasting style
+  2. Balance utility, combat, and roleplay spells
+  3. Consider the character's background and personality
+  4. Ensure spells are available to their class
+  5. Include a mix of offensive and defensive options
+
+  Use official spell names from the Player's Handbook.
+  Ensure suggestions provide a good mix of utility and combat options.
+
+  Ensure all output strictly follows the schema format below.
+  </rules>
+
+  <output_format>
+  {
+    "cantrips": ["string (2-4 cantrip names)"],
+    "level_1_spells": ["string (2-4 level 1 spell names)"]
+  }
+  </output_format>
+
+user_prompt: |
+  Suggest appropriate spells for a {{alignment}} {{race}} {{class}}:
+
+  {{#traits}}
+  - {{.}}
+  {{/traits}}
+
+  Consider their class abilities and likely adventuring needs.
+  Focus on spells that would complement their {{class}} abilities
+  and match their {{alignment}} tendencies.
+
+  {{#optional_context}}
+  Additional Context: {{.}}
+  {{/optional_context}}

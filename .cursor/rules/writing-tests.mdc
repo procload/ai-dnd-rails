@@ -1,0 +1,12 @@
+---
+description: Use these rules when writing or editing tests
+globs: *_test.rb
+---
+
+# When working with or writing test files
+
+1. Always attempt to run the tests after making changes to see if the tests pass or fail
+2. Never remove functionality to get a test to pass
+3. Ensure that we do not break or remove other parts of the application to get a test to pass
+4. A working application is more important than passing tests
+5. We don't need to boil the ocean, only write tests that are most important and relevant

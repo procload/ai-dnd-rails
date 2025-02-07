@@ -32,8 +32,13 @@ class Character < ApplicationRecord
   # Complex game rules broken down into readable Ruby code
   def armor_class
     base = 10  # Default AC without armor
-    armor = (equipment || []).find { |item| item['type'] == 'armor' }
-    base = armor['ac'] if armor
+    equipment_hash = equipment || {}
+    armor_items = equipment_hash['armor'] || []
+    
+    if armor = armor_items.first
+      base = armor['ac'].to_i
+    end
+    
     base + ability_modifier(:dexterity)
   end
 
@@ -47,16 +52,31 @@ class Character < ApplicationRecord
   end
 
   def generate_background
-    # Generate background synchronously
-    mock_data = MockLlmService.generate_background(self)
-    
-    # Clear the existing background to ensure it's properly replaced
-    self.background = nil
-    
+    # Get the prompt from our PromptService
+    prompt = Llm::PromptService.generate(
+      request_type: 'character_background',
+      provider: Rails.configuration.llm.provider,
+      name: name,
+      class: class_type,
+      alignment: alignment,
+      level: level
+    )
+
+    # Send the request to our LLM service
+    response = Llm::Service.chat(
+      messages: [
+        {
+          'role' => 'user',
+          'content' => prompt['user_prompt']
+        }
+      ],
+      system_prompt: prompt['system_prompt']
+    )
+
     # Update with new content
     update!(
-      background: mock_data[:background],
-      personality_traits: mock_data[:personality_traits]
+      background: response['background'],
+      personality_traits: response['personality_traits']
     )
   end
 
@@ -65,27 +85,16 @@ class Character < ApplicationRecord
   def set_default_values
     self.ability_scores ||= ABILITIES.each_with_object({}) { |ability, scores| scores[ability] = 10 }
     
-    # Use MockLlmService to generate initial data
-    mock_data = MockLlmService.generate_background(self)
-    self.background = mock_data[:background]
-    self.personality_traits = mock_data[:personality_traits]
-    
-    # Generate equipment using MockLlmService
-    self.equipment = MockLlmService.suggest_equipment(self)
-    
-    # Generate spells using MockLlmService if applicable
-    if ['Wizard', 'Sorcerer', 'Warlock', 'Bard', 'Cleric', 'Druid'].include?(class_type)
-      spell_data = MockLlmService.suggest_spells(self)
-      self.spells = (spell_data[:cantrips] || []) + (spell_data[:level_1_spells] || [])
-    else
-      self.spells = []
-    end
+    # Initialize empty arrays for equipment and spells
+    self.equipment = { 'weapons' => [], 'armor' => [], 'adventuring_gear' => [] }
+    self.spells = { 'cantrips' => [], 'level_1_spells' => [] }
+    self.personality_traits = []
   end
 
   def ensure_arrays_initialized
     self.personality_traits ||= []
-    self.equipment ||= []
-    self.spells ||= []
+    self.equipment ||= { 'weapons' => [], 'armor' => [], 'adventuring_gear' => [] }
+    self.spells ||= { 'cantrips' => [], 'level_1_spells' => [] }
   end
 
   # Simple, focused prompt generation for the LLM

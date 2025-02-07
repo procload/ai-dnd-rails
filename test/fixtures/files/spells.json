@@ -1,0 +1,8 @@
+{
+  "spell_suggestions": [
+    {
+      "cantrips": ["Test cantrip 1", "Test cantrip 2"],
+      "level_1_spells": ["Test level 1 spell 1", "Test level 1 spell 2"]
+    }
+  ]
+}

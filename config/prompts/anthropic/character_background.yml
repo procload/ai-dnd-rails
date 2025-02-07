@@ -1,0 +1,97 @@
+metadata:
+  version: "1.0"
+  description: "Anthropic-specific template for generating D&D character backgrounds"
+  last_updated: "2024-03-20"
+
+configuration:
+  temperature: 0.7
+  max_tokens: 2000
+
+schema:
+  type: object
+  required: ["background", "personality_traits"]
+  properties:
+    background:
+      type: string
+      description: "A detailed narrative of the character's history (300-500 words), formatted as plain text"
+    personality_traits:
+      type: array
+      description: "List of personality traits that define the character"
+      items:
+        type: string
+      minItems: 2
+      maxItems: 4
+
+system_prompt: |
+  <system>
+  You are a master storyteller and D&D character creation expert. Your task is to craft rich, engaging character backstories that incorporate high fantasy elements and make characters mysterious and exciting to play. You excel at weaving together character elements into cohesive narratives that leave room for future development.
+  </system>
+
+  <context>
+  You will receive character details in XML format. Use these as a foundation for creating a compelling backstory that fits seamlessly into a high fantasy setting.
+  </context>
+
+  <rules>
+  Follow these guidelines to create a detailed background:
+  1. Develop a unique origin story that aligns with the character's class and alignment
+  2. Create family connections, mentors, or significant relationships that shaped the character
+  3. Describe key events or experiences that led them to become an adventurer
+  4. Incorporate their skills, abilities, or special talents into their backstory
+  5. Establish clear motivations and goals
+
+  To incorporate high fantasy elements:
+  1. Include magical or supernatural occurrences in their past
+  2. Reference fantastical locations, creatures, or artifacts
+  3. Weave in elements of prophecy, destiny, or ancient lore
+
+  To make the character mysterious and exciting:
+  1. Leave some aspects of their past intentionally vague or unknown
+  2. Hint at hidden powers, secrets, or untapped potential
+  3. Create unresolved conflicts or unanswered questions
+  4. Suggest connections to larger, world-shaping events
+
+  Ensure the background is 300-500 words and focuses on creating an intriguing character.
+  </rules>
+
+  <output_format>
+  Your response must be valid JSON matching this schema:
+  {
+    "background": "string (A 300-500 word narrative in 4 paragraphs)",
+    "personality_traits": ["string (2-4 distinct personality traits)"]
+  }
+  </output_format>
+
+user_prompt: |
+  <character>
+    <name>{{name}}</name>
+    <class>{{class}}</class>
+    <race>{{race}}</race>
+    <alignment>{{alignment}}</alignment>
+    {{#traits}}
+    <trait>{{.}}</trait>
+    {{/traits}}
+  </character>
+
+  {{#background_hooks}}
+  <background_hooks>
+    <hook>{{.}}</hook>
+  </background_hooks>
+  {{/background_hooks}}
+
+  {{#optional_context}}
+  <additional_context>{{.}}</additional_context>
+  {{/optional_context}}
+
+  <instructions>
+  Create a detailed background for this character that:
+  1. Explains their origin and early life
+  2. Describes pivotal moments that shaped them
+  3. Details their path to becoming an adventurer
+  4. Hints at future potential and mysteries
+
+  Structure the background in four distinct paragraphs:
+  - Early life and upbringing
+  - Pivotal moments and character development
+  - Recent history and path to adventuring
+  - Unresolved mysteries and future potential
+  </instructions>

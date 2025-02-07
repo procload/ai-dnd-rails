@@ -13,36 +13,41 @@ The tech industry's fascination with complexity often leads us down convoluted p
 - Model structure and database design using jsonb and ActionText
 - Real-time updates with Turbo Streams
 - Background job processing for LLM integration
-- LinkedIn promotional posts completed
 
-Key Code Implementations:
+### Article 2: The Art of LLM Services in Rails [🚧 In Progress]
 
-- Character model with D&D rules and validations
-- Turbo Streams for real-time UI updates
-- Background job setup for LLM processing
-- Initial LLMService structure
-
-### Article 2: The Art of LLM Services in Rails [⚡ Next Up]
+#### Part 1: Foundation and Mock Implementation [✓ Complete]
 
 - Evolution from mock services to production
 - Why service objects shine for LLM integration
 - Building a flexible provider system
+- Mock provider implementation
   ```ruby
-  module LLM
-    class Service
-      def self.chat(messages:, system_prompt: nil)
-        new(config).chat(
-          messages: messages,
-          system_prompt: system_prompt
-        )
+  module Llm
+    module Providers
+      class Mock < Base
+        def chat(messages:, system_prompt: nil)
+          # Parse request and return structured response
+          response = case request
+                    when /background/i
+                      generate_background
+                    when /equipment/i
+                      suggest_equipment
+                    when /spells/i
+                      suggest_spells
+                    end
+        end
       end
     end
   end
   ```
+
+#### Part 2: Production Providers [⚡ Next Up]
+
 - Provider abstraction patterns
 
   ```ruby
-  module LLM
+  module Llm
     module Providers
       class Base
         def chat(messages:, system_prompt: nil)
@@ -52,10 +57,6 @@ Key Code Implementations:
 
       class Anthropic < Base
         # Anthropic-specific implementation
-      end
-
-      class OpenAI < Base
-        # OpenAI-specific implementation
       end
     end
   end
@@ -68,11 +69,10 @@ Key Code Implementations:
 
 Key Code Implementations:
 
-- Full LLMService architecture
+- Full LlmService architecture
 - Provider abstraction system
 - Mock-to-production transition
 - Background job processing
-- Streaming response handling
 - Error recovery and retry mechanisms
 
 ### Article 3: Rails 8's Modern Features

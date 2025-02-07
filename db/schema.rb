@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_30_144234) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_07_152423) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -58,11 +58,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_30_144234) do
     t.integer "level"
     t.string "alignment"
     t.jsonb "ability_scores"
-    t.jsonb "personality_traits"
-    t.jsonb "equipment"
-    t.jsonb "spells"
+    t.jsonb "personality_traits", default: "[]", null: false
+    t.jsonb "equipment", default: "{\"weapons\":[],\"armor\":[],\"adventuring_gear\":[]}", null: false
+    t.jsonb "spells", default: "{\"cantrips\":[],\"level_1_spells\":[]}", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "background"
+    t.check_constraint "equipment ? 'weapons'::text AND equipment ? 'armor'::text AND equipment ? 'adventuring_gear'::text", name: "equipment_required_keys_check"
+    t.check_constraint "jsonb_array_length(equipment -> 'weapons'::text) >= 0 AND jsonb_array_length(equipment -> 'weapons'::text) <= 4 AND jsonb_array_length(equipment -> 'armor'::text) >= 0 AND jsonb_array_length(equipment -> 'armor'::text) <= 2 AND jsonb_array_length(equipment -> 'adventuring_gear'::text) >= 0 AND jsonb_array_length(equipment -> 'adventuring_gear'::text) <= 8", name: "equipment_arrays_length_check"
+    t.check_constraint "jsonb_array_length(personality_traits) >= 0 AND jsonb_array_length(personality_traits) <= 4", name: "personality_traits_length_check"
+    t.check_constraint "jsonb_array_length(spells -> 'cantrips'::text) >= 0 AND jsonb_array_length(spells -> 'cantrips'::text) <= 4 AND jsonb_array_length(spells -> 'level_1_spells'::text) >= 0 AND jsonb_array_length(spells -> 'level_1_spells'::text) <= 4", name: "spells_arrays_length_check"
+    t.check_constraint "spells ? 'cantrips'::text AND spells ? 'level_1_spells'::text", name: "spells_required_keys_check"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

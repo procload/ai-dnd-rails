@@ -5,17 +5,17 @@ one:
   class_type: MyString
   level: 1
   alignment: MyString
-  ability_scores: 
-  personality_traits: 
-  equipment: 
-  spells: 
+  ability_scores: {}
+  personality_traits: []
+  equipment: { "weapons": [], "armor": [], "adventuring_gear": [] }
+  spells: { "cantrips": [], "level_1_spells": [] }
 
 two:
   name: MyString
   class_type: MyString
   level: 1
   alignment: MyString
-  ability_scores: 
-  personality_traits: 
-  equipment: 
-  spells: 
+  ability_scores: {}
+  personality_traits: []
+  equipment: { "weapons": [], "armor": [], "adventuring_gear": [] }
+  spells: { "cantrips": [], "level_1_spells": [] }

@@ -1,0 +1,91 @@
+---
+description: Use this as a reference guide when implementing our LLM service to generate the character details
+globs: 
+---
+
+## Section 1: LLM Service Architecture Setup
+
+Objective: Establish the overall structure and core interfaces for the LLM service.
+Tasks:
+	•	Define the Service Interface
+	•	Implement a central LLM::Service class that will route calls to the appropriate provider.
+	•	Establish a clear provider interface (e.g., an abstract LLM::Providers::Base class) with a method like chat(messages:, system_prompt: nil) that all providers must implement.
+	•	Configuration Management
+	•	Set up a configuration module (e.g., LLMConfig) to load provider settings and API keys from environment variables.
+	•	Create an .env.example with placeholders for the various API keys.
+	•	Error Handling & Logging
+	•	Integrate basic error handling in the service layer (wrap API calls, log errors).
+	•	Define a logging strategy (using Rails’ built-in logging) for debugging API calls.
+	•	Testing & Documentation
+	•	Write unit tests to ensure that the service loads the correct provider based on configuration.
+	•	Update documentation to include a high-level diagram of the service architecture and explain the provider interface.
+
+## Section 2: Text LLM Provider Implementations
+
+Objective: Implement and integrate specific providers (e.g., AzureOpenAI, Anthropic Claude, OpenAI) for text generation.
+Tasks:
+	•	Provider Class Implementation
+	•	Create provider classes (e.g., LLM::Providers::AzureOpenAI, LLM::Providers::Anthropic, LLM::Providers::OpenAI) inheriting from the base provider.
+	•	For each provider, implement:
+	•	The chat method with API-specific request formatting.
+	•	A test_connection method to verify API connectivity.
+	•	Basic retry logic and rate limiting (keeping it minimal for MVP).
+	•	Integration with LLM Service
+	•	Update the factory/initializer (e.g., LLM::Factory.create_provider) to correctly instantiate the chosen provider based on configuration.
+	•	Testing & Documentation
+	•	Write unit tests simulating API responses and error cases for each provider.
+	•	Document each provider’s configuration options and any specific caveats for use in the README or separate docs.
+
+## Section 3: Image Generation Service Integration
+
+Objective: Create a dedicated service for generating character portraits, allowing independent switching between OpenAI and other image APIs.
+Tasks:
+	•	Design the Image Service Structure
+	•	Implement an ImageGeneration::Service that exposes a method (e.g., generate_portrait(character:)) and routes calls to the appropriate image provider.
+	•	Define a provider interface (e.g., ImageGeneration::Providers::Base) outlining the expected methods.
+	•	Implement Provider Classes
+	•	Create provider classes such as ImageGeneration::Providers::OpenAI and another (e.g., ImageGeneration::Providers::Alternate) that handle:
+	•	API calls to generate images.
+	•	Error handling and basic retry logic.
+	•	Integration with the Character Generator
+	•	Add an API endpoint or background job hook to trigger portrait generation when a character is created/updated.
+	•	Ensure the service returns a URL or binary data that can be rendered in the character sheet.
+	•	Testing & Documentation
+	•	Write tests that simulate image API responses and verify proper error handling.
+	•	Update documentation to detail image provider configurations, how to switch providers, and expected outputs.
+
+## Section 4: Background Job Integration for Asynchronous LLM Processing
+
+Objective: Enable asynchronous processing of LLM requests (both text and image generation) using Sidekiq.
+Tasks:
+	•	Job Setup
+	•	Create a background job class (e.g., LlmProcessingJob) that wraps the LLM service calls.
+	•	Similarly, create a job for image generation if needed (e.g., ImageGenerationJob).
+	•	Sidekiq Configuration
+	•	Integrate Sidekiq into the Rails application and configure a basic job queue.
+	•	Update the Rails controller to enqueue jobs instead of making synchronous API calls.
+	•	Error Recovery & Logging
+	•	Implement basic retry strategies and error logging within the job classes.
+	•	Ensure jobs gracefully handle API timeouts and unexpected responses.
+	•	Testing & Documentation
+	•	Write integration tests to simulate job execution and error conditions.
+	•	Document the background job flow, configuration settings, and how to monitor job processing.
+
+## Section 5: End-to-End Testing, Logging, and Documentation Updates
+
+Objective: Finalize the integration with comprehensive testing, logging improvements, and thorough documentation.
+Tasks:
+	•	Integration Testing
+	•	Develop end-to-end tests covering text generation and image generation workflows.
+	•	Simulate both successful and error scenarios across providers and background jobs.
+	•	Enhanced Logging
+	•	Refine logging within the LLM and image services to provide actionable insights during failures.
+	•	Consider adding context (e.g., provider name, request parameters) to log messages.
+	•	Documentation
+	•	Update the README and any associated documentation files to reflect:
+	•	The new LLM and image service architectures.
+	•	Configuration instructions for environment variables.
+	•	Detailed usage examples and troubleshooting tips.
+	•	Ensure the blog post draft (Article 2) includes code examples and discussions around these implementations.
+
+Each of these sections is designed to be tackled in a logical order, yet they provide a modular approach that aligns with our instructional goals and MVP constraints. Let me know if you’d like any adjustments or further details in any section.

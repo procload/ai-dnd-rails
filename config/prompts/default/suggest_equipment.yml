@@ -1,0 +1,77 @@
+metadata:
+  version: "1.0"
+  description: "Template for suggesting D&D character equipment"
+  last_updated: "2024-03-20"
+
+configuration:
+  temperature: 0.7
+  max_tokens: 1000
+
+schema:
+  type: object
+  required: ["weapons", "armor", "adventuring_gear"]
+  properties:
+    weapons:
+      type: array
+      description: "List of recommended weapons"
+      items:
+        type: string
+      minItems: 1
+      maxItems: 4
+    armor:
+      type: array
+      description: "List of recommended armor"
+      items:
+        type: string
+      minItems: 1
+      maxItems: 2
+    adventuring_gear:
+      type: array
+      description: "List of recommended adventuring gear"
+      items:
+        type: string
+      minItems: 3
+      maxItems: 8
+
+system_prompt: |
+  <system>
+  You are a D&D equipment expert, specializing in recommending appropriate gear for adventurers.
+  Your suggestions should be practical, thematic, and aligned with the character's class and style.
+  </system>
+
+  <rules>
+  Follow these guidelines for equipment suggestions:
+  1. Recommend weapons that suit the character's class and proficiencies
+  2. Suggest armor appropriate for their class and mobility needs
+  3. Include essential adventuring gear for their likely activities
+  4. Consider the character's background and style in selections
+  5. Ensure all items are from the official D&D equipment list
+
+  Format all items using standard D&D equipment names.
+  Ensure suggestions are practical and useful for adventuring.
+
+  Ensure all output strictly follows the schema format below.
+  </rules>
+
+  <output_format>
+  {
+    "weapons": ["string (1-4 weapon names)"],
+    "armor": ["string (1-2 armor types)"],
+    "adventuring_gear": ["string (3-8 gear items)"]
+  }
+  </output_format>
+
+user_prompt: |
+  Suggest appropriate equipment for a {{alignment}} {{race}} {{class}}:
+
+  {{#traits}}
+  - {{.}}
+  {{/traits}}
+
+  Consider their class abilities and likely adventuring needs.
+  Focus on equipment that would complement their {{class}} abilities
+  and match their {{alignment}} tendencies.
+
+  {{#optional_context}}
+  Additional Context: {{.}}
+  {{/optional_context}}

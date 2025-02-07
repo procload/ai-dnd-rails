@@ -1,0 +1,71 @@
+---
+description: Use these rules when creating an LLM API call for the Anthropic Claude model to create structured and consistent output in its response
+globs: 
+---
+## For generating reliable JSON and structured data from Claude
+### These rules apply when you need consistent, parseable structured data output from Claude. Use these guidelines when:
+- Building data pipelines that require machine-readable responses
+- Extracting specific fields from unstructured text into structured formats
+- Transforming content into standardized JSON objects
+- Creating automated workflows that depend on structured responses
+- Implementing system integrations that require reliable data formats
+
+### DO NOT use these rules when:
+- You just need conversational or natural language responses
+- Formatting isn't critical for your use case
+- You're using Claude for creative writing or analysis
+- Your output will be read by humans rather than parsed by machines
+
+### The following rules are ordered by reliability and importance, with the tool use method being the most robust approach.
+
+- Always use Claude's tool use feature for most reliable structured output
+- Define specific tool with input schema matching desired output format
+- Set tool_choice parameter to force tool use
+- Include clear field descriptions in schema
+- Handle tool response validation
+-  severity: critical
+
+### Schema Definition Best Practices for Tool Input
+
+- Specify all required fields and their data types explicitly
+- Include descriptive field definitions in schema
+- Use nested objects when appropriate
+- Define value constraints for numerical fields
+- Mark optional fields clearly in schema
+
+### Temperature and Token Control Settings for Consistency
+
+- Set temperature to 0.01 for maximum consistency
+- Configure appropriate max_tokens for expected response size
+- Include validation requirements in prompt
+- Use field validators in schema definition
+
+
+### Response Validation and Quality Control Procedures
+
+- Always validate response is proper JSON before parsing
+- Consider using JSON repair tools for minor syntax fixes
+- Verify all required fields are present in response
+- Check field values match expected formats/ranges
+
+### Prefill Technique - Backup Method for Structured Output
+
+- Use as backup if tool use not available
+- Start response with beginning JSON structure
+- Set stop sequences to prevent extra text
+- Include closing brackets in stop sequences
+- Validate final output structure
+
+### Comprehensive Error Handling Implementation
+
+- Catch and handle tool use failures
+- Handle malformed JSON responses
+- Validate responses against schema
+- Implement retry logic where appropriate
+
+### Strategic Prompt Engineering for JSON Generation
+
+- Explicitly specify JSON output expectation
+- Mention json.loads() parsing requirement
+- Provide examples of valid output format
+- Use XML tags for wrapping expected JSON
