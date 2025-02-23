@@ -6,7 +6,7 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 
 ## 1. Solid Queue Setup (If Not Already Installed)
 
-- [x] **Install & Configure Solid Queue**
+- [x] **Install & Configure Solid Queue** _(Completed 2025-02-23)_
   - [x] Add `gem 'solid_queue'` to your `Gemfile`.
   - [x] Run `bundle install`.
   - [x] In `config/application.rb`, set:
@@ -21,11 +21,11 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 
 > Even though you have an existing app, it's helpful to create a **test job** to confirm that Solid Queue works correctly before converting your synchronous flows.
 
-- [x] **Generate and Test a Basic Job**
+- [x] **Generate and Test a Basic Job** _(Completed 2025-02-23)_
 
   - [x] Run `rails g job hello_world`.
   - [x] In `app/jobs/hello_world_job.rb`, implement `perform` to log `"Hello World from Solid Queue!"`.
-  - [ ] Create a quick route & controller action (or use Rails console) to enqueue the job:
+  - [x] Create a quick route & controller action to enqueue the job:
 
     ```ruby
     # config/routes.rb
@@ -40,7 +40,7 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
     end
     ```
 
-  - [ ] Hit `/test_hello_world_job` in your browser, then check Rails logs to confirm the job ran and logged the message.
+  - [x] Test endpoint in browser, confirmed job runs and logs message.
 
 ---
 
@@ -48,76 +48,32 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 
 > Now we'll ensure each user can only run up to 10 concurrent background jobs. This also sets up retry logic and the basic "perform" flow you'll reuse for all content-generation jobs.
 
-- [ ] **3.1 Implement a `UserJobCounter` Service**
+- [x] **3.1 Implement a `UserJobCounter` Service** _(Completed 2025-02-23)_
 
-  - [ ] Create `app/services/user_job_counter.rb`:
+  - [x] Create `app/services/user_job_counter.rb` with thread-safe implementation using `Concurrent::Map`
+  - [x] Implement increment, decrement, and count_for methods
+  - [x] Add configuration for max concurrent jobs
+  - [x] Add proper error handling and logging
 
-    ```ruby
-    class UserJobCounter
-      @@job_counts = Hash.new(0)  # or use a thread-safe store like Concurrent::Map
+- [x] **3.2 Enforce Concurrency Limit Before Enqueuing** _(Completed 2025-02-23)_
 
-      def self.increment(user_id)
-        @@job_counts[user_id] += 1
-      end
+  - [x] Created JobLimiting concern for controllers
+  - [x] Implemented check_job_limit! method
+  - [x] Added proper error handling and user feedback
+  - [x] Tested with TestJobsController
 
-      def self.decrement(user_id)
-        @@job_counts[user_id] = [@@job_counts[user_id] - 1, 0].max
-      end
+- [x] **3.3 Decrement on Completion or Failure** _(Completed 2025-02-23)_
 
-      def self.count_for(user_id)
-        @@job_counts[user_id]
-      end
-    end
-    ```
+  - [x] Implemented in ApplicationJob base class
+  - [x] Added proper error handling
+  - [x] Ensured cleanup in all cases
+  - [x] Tested with TestConcurrentJob
 
-- [ ] **3.2 Enforce Concurrency Limit Before Enqueuing**
-
-  - [ ] In your existing controller or service where you enqueue jobs:
-    ```ruby
-    if UserJobCounter.count_for(current_user.id) >= 10
-      flash[:alert] = "You have reached the 10-job limit."
-      redirect_to some_path and return
-    else
-      UserJobCounter.increment(current_user.id)
-      # Enqueue the actual job, e.g.:
-      MyLongRunningJob.perform_later(current_user.id, job_params)
-    end
-    ```
-
-- [ ] **3.3 Decrement on Completion or Failure**
-
-  - [ ] In `app/jobs/my_long_running_job.rb`:
-
-    ```ruby
-    class MyLongRunningJob < ApplicationJob
-      queue_as :default
-
-      rescue_from(StandardError) do |exception|
-        # Ensure concurrency count is decremented if the job fails
-        decrement_job_count
-        raise exception
-      end
-
-      def perform(user_id, job_params)
-        # Actual work goes here
-      ensure
-        decrement_job_count
-      end
-
-      private
-
-      def decrement_job_count
-        UserJobCounter.decrement(arguments.first) # user_id is the first arg
-      end
-    end
-    ```
-
-- [ ] **3.4 Exponential Backoff & Retries**
-  - [ ] In your job class, configure retries:
-    ```ruby
-    retry_on StandardError, attempts: 3, wait: ->(attempt) { [10, 30, 60][attempt] }
-    ```
-  - [ ] Confirm the final failure logs an error. You might also explicitly log in `rescue_from(StandardError)`.
+- [x] **3.4 Exponential Backoff & Retries** _(Completed 2025-02-23)_
+  - [x] Configured retries in ApplicationJob
+  - [x] Implemented exponential backoff
+  - [x] Added proper error logging
+  - [x] Tested retry functionality
 
 ---
 

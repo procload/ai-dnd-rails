@@ -1,0 +1,44 @@
+<%# Test Jobs Interface %>
+<div style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+  <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 1.5rem;">Background Jobs Test Interface</h1>
+
+  <%# Flash Messages %>
+  <% if flash.any? %>
+    <div style="margin-bottom: 1.5rem;">
+      <% flash.each do |type, message| %>
+        <div style="padding: 1rem; margin-bottom: 1rem; border-radius: 0.25rem; <%= type == 'notice' ? 'background-color: #d1fae5; color: #065f46;' : 'background-color: #fee2e2; color: #991b1b;' %>">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div style="display: flex; flex-direction: column; gap: 2rem;">
+    <%# Hello World Job Test %>
+    <div style="padding: 1.5rem; background-color: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+      <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Test Hello World Job</h2>
+      <p style="color: #4b5563; margin-bottom: 1rem;">This job simply logs a message to test the basic job infrastructure.</p>
+      <%= button_to "Enqueue Hello World Job",
+                    test_hello_world_job_path,
+                    style: "padding: 0.5rem 1rem; background-color: #3b82f6; color: white; border: none; border-radius: 0.25rem; cursor: pointer;" %>
+    </div>
+
+    <%# Concurrent Job Test %>
+    <div style="padding: 1.5rem; background-color: white; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+      <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Test Concurrent Jobs</h2>
+      <p style="color: #4b5563; margin-bottom: 1rem;">Test the job limiting feature by enqueueing multiple jobs for the same user.</p>
+      
+      <div>
+        <% test_user_id = 1 %>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <%= button_to "Enqueue Job for User #{test_user_id}",
+                      test_concurrent_job_path(test_user_id),
+                      style: "padding: 0.5rem 1rem; background-color: #10b981; color: white; border: none; border-radius: 0.25rem; cursor: pointer;" %>
+          <span style="color: #6b7280; font-size: 0.875rem;">
+            (Limited to <%= Rails.configuration.x.max_concurrent_jobs_per_user %> concurrent jobs)
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

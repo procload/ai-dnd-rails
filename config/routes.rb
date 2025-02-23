@@ -30,4 +30,8 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  get '/test_jobs', to: 'test_jobs#index', as: :test_jobs
+  post '/test_jobs/hello_world', to: 'test_jobs#hello_world', as: :test_hello_world_job
+  post '/test_jobs/concurrent/:user_id', to: 'test_jobs#test_concurrent', as: :test_concurrent_job
 end
