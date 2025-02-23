@@ -1,0 +1,142 @@
+---
+description: Use these rules when writing or editing tests
+globs: *_test.rb
+---
+## Framework Requirements
+- Version: Rails 8.x only (Rails 7.x not supported)
+- Severity: Critical
+- Enforcement: Required
+- Scope: System Tests
+
+## Core Testing Principles
+
+### Minimize System Test Usage
+- Keep system tests focused only on smoke testing and critical paths
+- Avoid testing business logic through system tests
+- System tests should verify basic end-to-end functionality only
+- Prefer model and controller tests for business logic
+- Maximum recommended system tests per application: 50
+
+### Test Categories and Priority
+- Smoke Tests (Required, Critical Priority)
+  - Basic application loading and routing
+  - Core user flows
+  - Critical integration points
+- Critical Path Tests (Required, High Priority)
+  - Primary user journeys
+  - Key business transactions
+  - Essential third-party integrations
+- Edge Cases (Optional, Low Priority)
+  - Exceptional scenarios
+  - Rare user paths
+  - Non-critical features
+
+## UI Testing Guidelines
+
+### Manual Testing Preference
+- Prioritize manual testing for UI feel and interaction
+- Use human testers for evaluating user experience
+- Focus on qualitative aspects like "feel right" that automation cannot assess
+- Document manual testing procedures and checklists
+
+### JavaScript Testing Approach
+- Test JavaScript logic through dedicated unit tests
+- Avoid system tests for JavaScript functionality validation
+- Use specialized JavaScript testing frameworks
+- Focus on component-level testing for UI logic
+
+## Performance Requirements
+
+### Test Suite Runtime
+- Maximum total suite duration: 10 minutes
+- Warning threshold: 5 minutes
+- Monitor and optimize slow tests
+- Implement parallel execution when possible
+
+### Individual Test Performance
+- Maximum test duration: 30 seconds
+- Warning threshold: 15 seconds
+- Log and review tests exceeding thresholds
+- Optimize or remove consistently slow tests
+
+## Error Handling
+
+### Flaky Test Management
+- Maximum retries: 2 attempts
+- Quarantine after 3 failures
+- Required actions for quarantined tests:
+  - Isolate from main test suite
+  - Review and document failure patterns
+  - Fix or remove within 1 week
+
+### Timing Issues
+- Use explicit waits instead of sleep
+- Maximum wait time: 5 seconds
+- Document all timing dependencies
+- Implement smart waiting strategies
+
+## Maintenance Guidelines
+
+### Regular Review Process
+- Monthly test suite review required
+- Evaluate test value vs maintenance cost
+- Remove tests that:
+  - Fail more than 3 times per week
+  - Require more than 2 hours monthly maintenance
+  - Provide low value compared to maintenance effort
+
+### Test Health Metrics
+- Track failure rate per test
+- Monitor maintenance time
+- Document bugs caught
+- Evaluate cost-benefit ratio
+
+## Implementation Best Practices
+
+### Test Isolation
+- Each test must be completely independent
+- No shared state between tests
+- Clean up all created data
+- Reset application state between tests
+
+### Data Setup
+- Use factories for test data
+- Clean up data after each test
+- Avoid dependencies on external services
+- Document all data requirements
+
+### Assertions
+- Maximum 3 assertions per test
+- Focus on critical outcomes
+- Clear failure messages
+- Avoid brittle selectors
+
+## Documentation Requirements
+
+### Required Documentation
+- Test purpose using format:
+  - "As a [role], I want to verify [functionality]"
+- Known limitations
+- Timing considerations
+- Data dependencies
+- Maintenance history
+
+### Maintenance Notes
+- Document all known issues
+- List timing-sensitive areas
+- Specify data requirements
+- Update documentation with changes
+
+## Continuous Integration
+
+### Execution Strategy
+- Enable parallel execution
+- Maximum 4 parallel threads
+- Capture screenshots on failure
+- Retain logs for 7 days
+
+### Failure Response
+- Automatic screenshot capture
+- Detailed failure logging
+- Immediate notification
+- Required review process

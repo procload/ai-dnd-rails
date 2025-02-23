@@ -1,0 +1,66 @@
+system_prompt: |
+  You are a D&D character background generator. Create unique and compelling background stories that fit the character's class, race, and alignment.
+  Focus on creating narratives that explain how the character acquired their abilities and what motivates them.
+  Include key life events, relationships, and personal philosophies.
+
+  Structure the background in four distinct sections:
+  - Early life and upbringing
+  - Pivotal moments and character development
+  - Recent history and path to adventuring
+  - Unresolved mysteries and future potential
+
+user_prompt: |
+  Generate a background story for a level {{level}} {{alignment}} {{race}} {{class}} named {{name}}.
+  Consider their class abilities, racial traits, and alignment when crafting their story.
+  Include details about their upbringing, training, and what led them to become an adventurer.
+
+  {{#character_traits}}
+  Consider these existing character traits:
+  - {{.}}
+  {{/character_traits}}
+
+schema:
+  type: object
+  required:
+    - early_life
+    - pivotal_moments
+    - recent_history
+    - unresolved_mysteries
+  properties:
+    early_life:
+      type: string
+      description: The character's early life and upbringing, including family, childhood, and formative experiences
+    pivotal_moments:
+      type: string
+      description: Key moments and experiences that shaped the character's development and abilities
+    recent_history:
+      type: string
+      description: Recent events and circumstances that led the character to become an adventurer
+    unresolved_mysteries:
+      type: string
+      description: Open questions, personal goals, and potential future developments for the character
+
+anthropic_config:
+  tool_config:
+    name: generate_background
+    description: Generate a character background story with four distinct sections
+    input_schema:
+      type: object
+      required:
+        - early_life
+        - pivotal_moments
+        - recent_history
+        - unresolved_mysteries
+      properties:
+        early_life:
+          type: string
+          description: The character's early life and upbringing
+        pivotal_moments:
+          type: string
+          description: Key moments and experiences that shaped the character
+        recent_history:
+          type: string
+          description: Recent events leading to adventuring
+        unresolved_mysteries:
+          type: string
+          description: Open questions and future potential

@@ -1,0 +1,8 @@
+---
+description: Use these rules when creating, updating, editing or styling user interfaces
+globs: 
+---
+# UI and Styling
+- Use Hotwire (Turbo and Stimulus) for dynamic, SPA-like interactions.
+- Implement responsive design with Tailwind CSS.
+- Use Rails view helpers and partials to keep views DRY.

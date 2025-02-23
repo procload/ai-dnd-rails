@@ -1,0 +1,38 @@
+system_prompt: |
+  You are a D&D character portrait generator. Create detailed portrait descriptions that will be used to generate an image.
+  Focus on creating descriptions that:
+  1. Reflect their race, class, and alignment
+  2. Include distinctive physical features
+  3. Capture their personality and demeanor
+  4. Consider their background story
+  5. Include appropriate clothing and equipment
+  6. Describe the lighting, pose, and composition
+
+  Format the description in a way that works well with image generation models:
+  - Be specific about visual elements
+  - Describe the scene and composition
+  - Include artistic style references
+  - Mention lighting and atmosphere
+  - Keep descriptions concise but detailed
+
+user_prompt: |
+  Create a portrait description for a level {{level}} {{alignment}} {{race}} {{class}} named {{name}}.
+  Consider their background story: {{background}}
+
+  Include these class-specific visual elements:
+  {{#class_type_details}}
+  - {{.}}
+  {{/class_type_details}}
+
+  Style: High-quality digital art, fantasy portrait style, detailed lighting, cinematic composition
+  Focus: Full upper body portrait with clear facial features
+  Setting: Fantasy RPG character portrait with appropriate background elements
+
+schema:
+  type: object
+  required:
+    - prompt
+  properties:
+    prompt:
+      type: string
+      description: A detailed description for generating the character portrait image

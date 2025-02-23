@@ -1,0 +1,75 @@
+system_prompt: |
+  You are a D&D character values generator. Create deep, meaningful ideals, bonds, and flaws that shape the character's motivations and decisions.
+
+  For each category:
+  - Ideals: Core beliefs and principles that drive their actions
+  - Bonds: Connections and commitments that tie them to people, places, or causes
+  - Flaws: Internal struggles, weaknesses, or contradictions that create conflict
+
+  Each value should include:
+  - A clear statement of the value
+  - How it manifests in their behavior and decisions
+
+user_prompt: |
+  Generate core values (ideals, bonds, and flaws) for a level {{level}} {{alignment}} {{race}} {{class}} named {{name}}.
+  Consider their background story: {{background}}
+  Create values that provide interesting roleplaying opportunities and potential story hooks.
+
+schema:
+  type: object
+  required:
+    - ideals
+    - bonds
+    - flaws
+  properties:
+    ideals:
+      type: array
+      description: The character's core beliefs and principles
+      items:
+        type: object
+        required:
+          - ideal
+          - manifestation
+        properties:
+          ideal:
+            type: string
+            description: A clear statement of their belief or principle
+          manifestation:
+            type: string
+            description: How this ideal manifests in their behavior and decisions
+      minItems: 2
+      maxItems: 3
+    bonds:
+      type: array
+      description: The character's connections and commitments
+      items:
+        type: object
+        required:
+          - bond
+          - manifestation
+        properties:
+          bond:
+            type: string
+            description: A clear statement of their connection or commitment
+          manifestation:
+            type: string
+            description: How this bond affects their behavior and decisions
+      minItems: 2
+      maxItems: 3
+    flaws:
+      type: array
+      description: The character's internal struggles and weaknesses
+      items:
+        type: object
+        required:
+          - flaw
+          - manifestation
+        properties:
+          flaw:
+            type: string
+            description: A clear statement of their weakness or struggle
+          manifestation:
+            type: string
+            description: How this flaw manifests in their behavior and decisions
+      minItems: 2
+      maxItems: 3

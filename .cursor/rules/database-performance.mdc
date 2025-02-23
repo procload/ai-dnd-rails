@@ -1,0 +1,9 @@
+---
+description: Use this when architecting and constructing a database and when improving performance of the application
+globs: 
+---
+# Database and Performance Optimization
+- Use database indexing effectively.
+- Implement caching strategies (fragment caching, Russian Doll caching).
+- Use eager loading to avoid N+1 queries.
+- Optimize database queries using includes, joins, or select.

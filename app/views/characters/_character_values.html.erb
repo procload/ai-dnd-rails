@@ -1,0 +1,70 @@
+<!-- Character Values Section -->
+<div id="character_values_section" class="bg-white shadow-lg rounded-lg overflow-hidden">
+  <div class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+    <h3 class="font-medium text-gray-900">Character Values</h3>
+    <%= button_to generate_character_values_character_path(character),
+          method: :post,
+          class: "inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700",
+          data: { 
+            turbo: true,
+            controller: "loading",
+            action: "turbo:submit-start->loading#start turbo:submit-end->loading#end turbo:submit-error->loading#error"
+          } do %>
+      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" 
+           xmlns="http://www.w3.org/2000/svg" 
+           fill="none" 
+           viewBox="0 0 24 24"
+           data-loading-target="spinner">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span data-loading-target="button">
+        <%= character.character_values.values.flatten.any? ? 'Regenerate' : 'Generate' %> Values
+      </span>
+    <% end %>
+  </div>
+  <div class="p-4">
+    <% if character.character_values.values.flatten.any? %>
+      <!-- Ideals -->
+      <div class="mb-4">
+        <h5 class="text-xs font-medium text-indigo-600 uppercase tracking-wide mb-2">Ideals - What They Fight For</h5>
+        <div class="space-y-3">
+          <% character.character_values['ideals'].each do |ideal| %>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <div class="font-medium text-gray-900"><%= ideal['ideal'] %></div>
+              <p class="text-sm text-gray-600 mt-1"><%= ideal['manifestation'] %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Bonds -->
+      <div class="mb-4">
+        <h5 class="text-xs font-medium text-emerald-600 uppercase tracking-wide mb-2">Bonds - What They Care About</h5>
+        <div class="space-y-3">
+          <% character.character_values['bonds'].each do |bond| %>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <div class="font-medium text-gray-900"><%= bond['bond'] %></div>
+              <p class="text-sm text-gray-600 mt-1"><%= bond['manifestation'] %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Flaws -->
+      <div>
+        <h5 class="text-xs font-medium text-rose-600 uppercase tracking-wide mb-2">Flaws - Internal Struggles</h5>
+        <div class="space-y-3">
+          <% character.character_values['flaws'].each do |flaw| %>
+            <div class="bg-gray-50 rounded-lg p-3">
+              <div class="font-medium text-gray-900"><%= flaw['flaw'] %></div>
+              <p class="text-sm text-gray-600 mt-1"><%= flaw['manifestation'] %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <p class="text-gray-500 italic">No character values defined</p>
+    <% end %>
+  </div>
+</div> 

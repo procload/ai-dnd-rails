@@ -1,0 +1,19 @@
+---
+description: Use this rule when working with Ruby and Ruby on Rails for best practices
+globs: 
+---
+## Ruby and Rails Usage
+- Always tell me the command line prompt to run in order to generate any migrations that are recommended. Never manually create a migration file.
+- Use Ruby 3.x features when appropriate (e.g., pattern matching, endless methods).
+- Leverage Rails' built-in helpers and methods.
+- Use ActiveRecord effectively for database operations.
+- Do not use Rails 7
+- Use Rails 8 for this project
+
+## Key Rails Conventions
+- Follow RESTful routing conventions.
+- Use concerns for shared behavior across models or controllers.
+- Implement service objects for complex business logic.
+- Use background jobs (e.g., Sidekiq) for time-consuming tasks.
+
+

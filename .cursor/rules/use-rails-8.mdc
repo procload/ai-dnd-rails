@@ -1,0 +1,10 @@
+---
+description: This rule states to use Rails 8 for this project and not Rails 7
+globs: 
+---
+
+# Use the latest version of Ruby on Rails 8 for this
+
+- Do not use Rails 7
+- Use Rails 8 for this project
+

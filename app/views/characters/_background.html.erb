@@ -1,0 +1,69 @@
+<!-- Background Section -->
+<div id="background_section" class="bg-white shadow rounded-lg p-6">
+  <div class="flex justify-between items-start mb-4">
+    <h3 class="text-lg font-medium text-gray-900">Character Background</h3>
+
+    <div class="flex space-x-2">
+      <%= button_to generate_background_character_path(character),
+                    method: :post,
+                    class: "inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700",
+                    data: {
+                      turbo: true,
+                      controller: "loading",
+                      action: "turbo:submit-start->loading#start turbo:submit-end->loading#end turbo:submit-error->loading#error"
+                    } do %>
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white hidden" 
+             xmlns="http://www.w3.org/2000/svg" 
+             fill="none" 
+             viewBox="0 0 24 24"
+             data-loading-target="spinner">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span data-loading-target="button">
+          <%= character.background.present? ? 'Regenerate' : 'Generate' %> Background
+        </span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-4 space-y-4">
+    <% if character.background.present? %>
+      <!-- Early Life -->
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-sm font-medium text-gray-900 mb-2">Early Life & Upbringing</h4>
+        <div class="prose prose-sm max-w-none text-gray-700">
+          <%= character.background.to_plain_text.split("Pivotal Moments").first %>
+        </div>
+      </div>
+
+      <!-- Pivotal Moments -->
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-sm font-medium text-gray-900 mb-2">Pivotal Moments</h4>
+        <div class="prose prose-sm max-w-none text-gray-700">
+          <%= character.background.to_plain_text.split("Pivotal Moments").last.split("Path to Adventuring").first %>
+        </div>
+      </div>
+
+      <!-- Path to Adventuring -->
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-sm font-medium text-gray-900 mb-2">Path to Adventuring</h4>
+        <div class="prose prose-sm max-w-none text-gray-700">
+          <%= character.background.to_plain_text.split("Path to Adventuring").last.split("Unresolved Mysteries").first %>
+        </div>
+      </div>
+
+      <!-- Unresolved Mysteries -->
+      <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-sm font-medium text-gray-900 mb-2">Unresolved Mysteries</h4>
+        <div class="prose prose-sm max-w-none text-gray-700">
+          <%= character.background.to_plain_text.split("Unresolved Mysteries").last %>
+        </div>
+      </div>
+    <% else %>
+      <div class="text-center py-4">
+        <p class="text-gray-500 text-sm italic">No background story has been generated yet.</p>
+      </div>
+    <% end %>
+  </div>
+</div> 

@@ -1,0 +1,16 @@
+{
+  "traits": [
+    {
+      "trait": "Curious",
+      "description": "Always asking questions and seeking knowledge"
+    },
+    {
+      "trait": "Brave",
+      "description": "Willing to face danger to protect others"
+    },
+    {
+      "trait": "Loyal",
+      "description": "Stands by friends and allies no matter what"
+    }
+  ]
+}

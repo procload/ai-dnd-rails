@@ -1,0 +1,121 @@
+system_prompt: |
+  You are a D&D spellcasting advisor. Suggest appropriate spells for characters based on their class and level.
+  Consider both combat utility and roleplay potential when making suggestions.
+  Focus on spells that would complement the character's role and provide interesting options in various situations.
+
+user_prompt: |
+  Suggest spells for a level {{level}} {{class}}.
+  Consider their spellcasting ability and typical role when making suggestions.
+  Include a mix of utility and combat spells.
+
+schema:
+  type: object
+  required:
+    - cantrips
+    - level_1_spells
+  properties:
+    cantrips:
+      type: array
+      description: List of cantrips (0-level spells)
+      items:
+        type: object
+        required:
+          - name
+          - school
+        properties:
+          name:
+            type: string
+            description: The name of the spell
+          school:
+            type: string
+            description: The school of magic
+            enum:
+              - Abjuration
+              - Conjuration
+              - Divination
+              - Enchantment
+              - Evocation
+              - Illusion
+              - Necromancy
+              - Transmutation
+      maxItems: 4
+    level_1_spells:
+      type: array
+      description: List of 1st-level spells
+      items:
+        type: object
+        required:
+          - name
+          - school
+        properties:
+          name:
+            type: string
+            description: The name of the spell
+          school:
+            type: string
+            description: The school of magic
+            enum:
+              - Abjuration
+              - Conjuration
+              - Divination
+              - Enchantment
+              - Evocation
+              - Illusion
+              - Necromancy
+              - Transmutation
+      maxItems: 4
+
+anthropic_config:
+  tool_config:
+    name: suggest_spells
+    description: Suggest appropriate spells for a spellcasting character
+    input_schema:
+      type: object
+      required:
+        - cantrips
+        - level_1_spells
+      properties:
+        cantrips:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - school
+            properties:
+              name:
+                type: string
+              school:
+                type: string
+                enum:
+                  - Abjuration
+                  - Conjuration
+                  - Divination
+                  - Enchantment
+                  - Evocation
+                  - Illusion
+                  - Necromancy
+                  - Transmutation
+          maxItems: 4
+        level_1_spells:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - school
+            properties:
+              name:
+                type: string
+              school:
+                type: string
+                enum:
+                  - Abjuration
+                  - Conjuration
+                  - Divination
+                  - Enchantment
+                  - Evocation
+                  - Illusion
+                  - Necromancy
+                  - Transmutation
+          maxItems: 4

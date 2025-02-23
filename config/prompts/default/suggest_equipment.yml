@@ -1,0 +1,114 @@
+system_prompt: |
+  You are a D&D equipment advisor. Suggest appropriate equipment for characters based on their class, level, and intended role.
+  Consider both combat effectiveness and thematic appropriateness when making suggestions.
+  Include a mix of weapons, armor, and adventuring gear that would help the character succeed in their adventures.
+
+user_prompt: |
+  Suggest equipment for a level {{level}} {{class}}.
+  Consider their class abilities and typical combat role when making suggestions.
+  Include weapons, armor, and essential adventuring gear.
+
+schema:
+  type: object
+  required:
+    - weapons
+    - armor
+    - adventuring_gear
+  properties:
+    weapons:
+      type: array
+      description: List of weapons suitable for the character
+      items:
+        type: object
+        required:
+          - name
+          - damage
+        properties:
+          name:
+            type: string
+            description: The name of the weapon
+          damage:
+            type: string
+            description: The damage dice and type (e.g., "1d8 slashing")
+      maxItems: 4
+    armor:
+      type: array
+      description: List of armor suitable for the character
+      items:
+        type: object
+        required:
+          - name
+          - ac
+        properties:
+          name:
+            type: string
+            description: The name of the armor
+          ac:
+            type: integer
+            description: The base armor class provided
+      maxItems: 2
+    adventuring_gear:
+      type: array
+      description: List of essential adventuring gear
+      items:
+        oneOf:
+          - type: string
+            description: Simple item name
+          - type: object
+            required:
+              - name
+            properties:
+              name:
+                type: string
+                description: The name of the item
+      maxItems: 8
+
+anthropic_config:
+  tool_config:
+    name: suggest_equipment
+    description: Suggest appropriate equipment for a character
+    input_schema:
+      type: object
+      required:
+        - weapons
+        - armor
+        - adventuring_gear
+      properties:
+        weapons:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - damage
+            properties:
+              name:
+                type: string
+              damage:
+                type: string
+          maxItems: 4
+        armor:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - ac
+            properties:
+              name:
+                type: string
+              ac:
+                type: integer
+          maxItems: 2
+        adventuring_gear:
+          type: array
+          items:
+            oneOf:
+              - type: string
+              - type: object
+                required:
+                  - name
+                properties:
+                  name:
+                    type: string
+          maxItems: 8

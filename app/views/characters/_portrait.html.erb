@@ -1,0 +1,19 @@
+<%# app/views/characters/_portrait.html.erb %>
+<div id="character_portrait" class="relative">
+  <% if character.image_status == "generating" %>
+    <div class="animate-pulse bg-gray-200 rounded-lg w-full h-64 flex items-center justify-center">
+      <p class="text-gray-500">Generating portrait...</p>
+    </div>
+  <% elsif character.current_portrait&.image&.attached? %>
+    <%= image_tag character.current_portrait.image.variant(:medium),
+                  class: "w-full rounded-lg shadow-lg" %>
+    
+    <div class="mt-2 text-sm text-gray-500">
+      <p>Generated <%= time_ago_in_words(character.current_portrait.created_at) %> ago</p>
+    </div>
+  <% else %>
+    <div class="bg-gray-100 rounded-lg w-full h-64 flex items-center justify-center">
+      <p class="text-gray-500">No portrait generated yet</p>
+    </div>
+  <% end %>
+</div> 

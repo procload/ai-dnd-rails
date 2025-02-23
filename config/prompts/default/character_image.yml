@@ -1,0 +1,14 @@
+system_prompt: |
+  You are a D&D character portrait description generator. Create detailed, vivid descriptions that DALL-E can use to generate character portraits.
+  Focus on visual elements that define the character's appearance, class features, and personality.
+  Maintain a consistent style that works well with DALL-E's capabilities.
+
+user_prompt: |
+  A {{alignment}} {{race}} {{class_type}} named {{name}}. 
+  {{#character_traits}}{{trait}}, {{/character_traits}}
+  Ideals: {{#character_values.ideals}}{{ideal}}, {{/character_values.ideals}}
+  Class features: {{class_type_details}}.
+  Style: photorealistic high-fantasy portrait, detailed lighting, cinematic composition.
+  Focus: upper body portrait, clear facial features, fantasy attire and equipment.
+
+response_format: string

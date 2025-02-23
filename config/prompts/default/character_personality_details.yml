@@ -1,0 +1,71 @@
+system_prompt: |
+  You are a D&D character personality generator. Create deep and nuanced personality details that reflect the character's background, class, and alignment.
+  Focus on creating ideals, bonds, and flaws that drive the character's actions and decisions.
+  Each element should have both a core concept and a specific manifestation in the character's behavior.
+
+user_prompt: |
+  Generate personality details for a level {{level}} {{alignment}} {{race}} {{class}} named {{name}}.
+  Consider their background: {{background}}
+  And their existing personality traits: {{personality_traits}}
+
+  Create a set of ideals (what they believe in), bonds (what connects them), and flaws (their weaknesses).
+  Each should include both the core concept and how it manifests in their behavior.
+
+schema:
+  type: object
+  required:
+    - ideals
+    - bonds
+    - flaws
+  properties:
+    ideals:
+      type: array
+      description: The character's core beliefs and principles
+      items:
+        type: object
+        required:
+          - ideal
+          - manifestation
+        properties:
+          ideal:
+            type: string
+            description: The core belief or principle
+          manifestation:
+            type: string
+            description: How this ideal manifests in their behavior
+      minItems: 2
+      maxItems: 3
+    bonds:
+      type: array
+      description: The character's connections and loyalties
+      items:
+        type: object
+        required:
+          - bond
+          - manifestation
+        properties:
+          bond:
+            type: string
+            description: The connection or loyalty
+          manifestation:
+            type: string
+            description: How this bond affects their actions
+      minItems: 2
+      maxItems: 3
+    flaws:
+      type: array
+      description: The character's weaknesses and imperfections
+      items:
+        type: object
+        required:
+          - flaw
+          - manifestation
+        properties:
+          flaw:
+            type: string
+            description: The weakness or imperfection
+          manifestation:
+            type: string
+            description: How this flaw impacts their behavior
+      minItems: 2
+      maxItems: 3

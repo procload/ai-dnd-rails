@@ -1,0 +1,35 @@
+<%# app/views/characters/_current_portrait.html.erb %>
+<div id="character_portrait" class="relative">
+  <% if character.current_portrait&.image&.attached? %>
+    <div class="relative group">
+      <%= image_tag character.current_portrait.image.variant(:medium),
+                    class: "w-full rounded-lg shadow-lg" %>
+      <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-50 rounded-lg">
+        <%= button_to generate_portrait_character_path(character), 
+            method: :post,
+            class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors",
+            data: { turbo_stream: true } do %>
+          <i class="fas fa-sync-alt mr-2"></i>Generate New Portrait
+        <% end %>
+      </div>
+    </div>
+
+    <%= render "characters/portrait_gallery", character: character %>
+  <% else %>
+    <div class="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-lg">
+      <% if local_assigns[:error].present? %>
+        <div class="text-red-600 mb-4">
+          <i class="fas fa-exclamation-circle mr-2"></i><%= error %>
+        </div>
+      <% end %>
+      
+      <p class="text-gray-600 mb-4">No portrait generated yet</p>
+      <%= button_to generate_portrait_character_path(character), 
+          method: :post,
+          class: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors",
+          data: { turbo_stream: true } do %>
+        <i class="fas fa-magic mr-2"></i>Generate Portrait
+      <% end %>
+    </div>
+  <% end %>
+</div> 

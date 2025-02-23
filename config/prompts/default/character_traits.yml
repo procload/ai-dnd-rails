@@ -1,0 +1,44 @@
+system_prompt: |
+  You are a D&D character trait generator. Create unique and compelling personality traits that fit the character's class, race, and alignment.
+  Focus on creating traits that:
+  1. Reflect their background and experiences
+  2. Show how they interact with others
+  3. Demonstrate their values and beliefs
+  4. Include both strengths and quirks
+
+  Each trait should have:
+  - A clear, concise trait name
+  - A category (e.g., social, combat, roleplay, general)
+  - A detailed description of how this trait manifests
+
+user_prompt: |
+  Generate personality traits for a level {{level}} {{alignment}} {{race}} {{class}} named {{name}}.
+  Consider their class abilities, racial traits, and alignment when crafting their traits.
+  Create traits that would be interesting to roleplay and that provide hooks for character development.
+
+schema:
+  type: object
+  required:
+    - traits
+  properties:
+    traits:
+      type: array
+      description: List of personality traits that define the character
+      items:
+        type: object
+        required:
+          - trait
+          - description
+        properties:
+          trait:
+            type: string
+            description: A short, descriptive name for the trait
+          category:
+            type: string
+            description: The category this trait belongs to (social, combat, roleplay, general)
+            enum: [social, combat, roleplay, general]
+          description:
+            type: string
+            description: A detailed description of how this trait manifests in the character's behavior
+      minItems: 3
+      maxItems: 5

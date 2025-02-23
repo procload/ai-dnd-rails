@@ -1,0 +1,156 @@
+<!-- Character Sheet -->
+<div class="max-w-7xl mx-auto">
+  <!-- Header Section -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+    <!-- Basic Info -->
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden md:col-span-2">
+      <h3 class="px-4 py-2 bg-gray-50 border-b border-gray-200">Character Info</h3>
+      <div class="p-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <dl class="grid grid-cols-2 gap-4 sm:col-span-2">
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Name</dt>
+              <dd class="text-lg text-gray-900"><%= character.name %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Level</dt>
+              <dd class="text-lg text-gray-900"><%= character.level %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Race</dt>
+              <dd class="text-lg text-gray-900"><%= character.race %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Class</dt>
+              <dd class="text-lg text-gray-900"><%= character.class_type %></dd>
+            </div>
+            <div class="col-span-2">
+              <dt class="text-sm font-medium text-gray-500">Alignment</dt>
+              <dd class="text-lg text-gray-900"><%= character.alignment %></dd>
+            </div>
+          </dl>
+          <dl class="grid grid-cols-1 gap-4">
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Armor Class</dt>
+              <dd class="text-2xl font-bold text-gray-900"><%= character.armor_class %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Hit Points</dt>
+              <dd class="text-2xl font-bold text-gray-900"><%= character.hit_points %></dd>
+            </div>
+            <div>
+              <dt class="text-sm font-medium text-gray-500">Proficiency</dt>
+              <dd class="text-2xl font-bold text-gray-900">+<%= character.proficiency_bonus %></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portrait -->
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+      <%= render "characters/current_portrait", character: character %>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Left Column: Character Stats -->
+    <div class="space-y-6">
+      <!-- Ability Scores -->
+      <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <h3 class="px-4 py-2 bg-gray-50 border-b border-gray-200">Ability Scores</h3>
+        <div class="p-4">
+          <dl class="grid grid-cols-2 gap-4">
+            <% Character::ABILITIES.each do |ability| %>
+              <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                <dt class="text-sm font-medium text-gray-900 uppercase"><%= ability %></dt>
+                <dd class="text-lg">
+                  <span class="font-bold"><%= character.ability_scores[ability] %></span>
+                  <span class="text-gray-500 ml-2">(<%= "%+d" % character.ability_modifier(ability) %>)</span>
+                </dd>
+              </div>
+            <% end %>
+          </dl>
+        </div>
+      </div>
+
+      <!-- Equipment -->
+      <div id="equipment_section" class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+          <h3 class="font-medium text-gray-900">Equipment</h3>
+          <%= button_to generate_equipment_suggestions_character_path(character),
+                method: :post,
+                class: "inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700",
+                data: { 
+                  turbo: true,
+                  controller: "loading",
+                  action: "turbo:submit-start->loading#start turbo:submit-end->loading#end turbo:submit-error->loading#error"
+                } do %>
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" 
+                 xmlns="http://www.w3.org/2000/svg" 
+                 fill="none" 
+                 viewBox="0 0 24 24"
+                 data-loading-target="spinner">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span data-loading-target="button">
+              <%= character.equipment.values.flatten.any? ? 'Regenerate' : 'Generate' %> Equipment
+            </span>
+          <% end %>
+        </div>
+        <div class="p-4">
+          <% if character.equipment.present? %>
+            <div class="space-y-4">
+              <% character.equipment.each do |category, items| %>
+                <div>
+                  <h4 class="text-sm font-medium text-gray-900 mb-2 capitalize"><%= category.humanize %></h4>
+                  <% if items.any? %>
+                    <ul class="list-disc list-inside space-y-1">
+                      <% items.each do |item| %>
+                        <li class="text-gray-700">
+                          <% if item.is_a?(Hash) %>
+                            <%= item['name'] %>
+                            <% if item['damage'].present? %>
+                              <span class="text-gray-500">(<%= item['damage'] %>)</span>
+                            <% elsif item['ac'].present? %>
+                              <span class="text-gray-500">(AC <%= item['ac'] %>)</span>
+                            <% end %>
+                          <% else %>
+                            <%= item %>
+                          <% end %>
+                        </li>
+                      <% end %>
+                    </ul>
+                  <% else %>
+                    <p class="text-gray-500 italic">No <%= category.humanize.downcase %> equipped</p>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-gray-500 italic">No equipment defined</p>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Spells (only for spellcasters) -->
+      <% if character.spellcaster? %>
+        <%= render "characters/spells", character: character %>
+      <% end %>
+    </div>
+
+    <!-- Right Column: Story & Personality -->
+    <div class="space-y-6">
+      <!-- Background -->
+      <%= render "characters/background", character: character %>
+
+      <!-- Character Traits -->
+      <%= render "characters/personality_traits", character: character %>
+
+      <!-- Character Values -->
+      <%= render "characters/character_values", character: character %>
+    </div>
+  </div>
+</div> 

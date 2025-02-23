@@ -1,0 +1,16 @@
+<%# Portrait Gallery %>
+<div id="portrait_gallery" class="mt-4 relative w-full">
+  <div class="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+    <div class="flex space-x-2 min-w-min">
+      <% character.character_portraits.most_recent_first.each do |portrait| %>
+        <%= button_to select_character_portrait_path(character, portrait),
+            method: :post,
+            class: "flex-none focus:outline-none",
+            data: { turbo_stream: true } do %>
+          <%= image_tag portrait.image.variant(:thumb),
+                      class: "w-[50px] h-[50px] min-w-[50px] object-cover rounded #{portrait.selected? ? 'ring-2 ring-blue-500' : 'opacity-75 hover:opacity-100'}" %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div> 
