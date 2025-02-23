@@ -6,25 +6,25 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 
 ## 1. Solid Queue Setup (If Not Already Installed)
 
-- [ ] **Install & Configure Solid Queue**
-  - [ ] Add `gem 'solid_queue'` to your `Gemfile`.
-  - [ ] Run `bundle install`.
-  - [ ] In `config/application.rb`, set:
+- [x] **Install & Configure Solid Queue**
+  - [x] Add `gem 'solid_queue'` to your `Gemfile`.
+  - [x] Run `bundle install`.
+  - [x] In `config/application.rb`, set:
     ```ruby
     config.active_job.queue_adapter = :solid_queue
     ```
-  - [ ] Confirm installation (e.g., `rails about` or `bundle info solid_queue`).
+  - [x] Confirm installation (e.g., `rails about` or `bundle info solid_queue`).
 
 ---
 
 ## 2. Basic Job to Verify Queue Functionality
 
-> Even though you have an existing app, it’s helpful to create a **test job** to confirm that Solid Queue works correctly before converting your synchronous flows.
+> Even though you have an existing app, it's helpful to create a **test job** to confirm that Solid Queue works correctly before converting your synchronous flows.
 
-- [ ] **Generate and Test a Basic Job**
+- [x] **Generate and Test a Basic Job**
 
-  - [ ] Run `rails g job hello_world`.
-  - [ ] In `app/jobs/hello_world_job.rb`, implement `perform` to log `"Hello World from Solid Queue!"`.
+  - [x] Run `rails g job hello_world`.
+  - [x] In `app/jobs/hello_world_job.rb`, implement `perform` to log `"Hello World from Solid Queue!"`.
   - [ ] Create a quick route & controller action (or use Rails console) to enqueue the job:
 
     ```ruby
@@ -46,7 +46,7 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 
 ## 3. Concurrency Limit & Basic Job Logic
 
-> Now we’ll ensure each user can only run up to 10 concurrent background jobs. This also sets up retry logic and the basic “perform” flow you’ll reuse for all content-generation jobs.
+> Now we'll ensure each user can only run up to 10 concurrent background jobs. This also sets up retry logic and the basic "perform" flow you'll reuse for all content-generation jobs.
 
 - [ ] **3.1 Implement a `UserJobCounter` Service**
 
@@ -162,7 +162,7 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 
 - [ ] **4.3 Check `canceled?` in the Job**
 
-  - [ ] In your job’s `perform`:
+  - [ ] In your job's `perform`:
 
     ```ruby
     def perform(user_id, job_params)
@@ -171,7 +171,7 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
         return
       end
 
-      # Otherwise, proceed with the job’s work
+      # Otherwise, proceed with the job's work
       # ...
     ensure
       UserJobCounter.decrement(user_id)
@@ -215,7 +215,7 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 
 - [ ] **5.3 Cancel Button Integration**
 
-  - [ ] Ensure the Cancel link calls your cancel route. On success, you can render another Turbo Stream partial (“Job canceled”) for 5 seconds.
+  - [ ] Ensure the Cancel link calls your cancel route. On success, you can render another Turbo Stream partial ("Job canceled") for 5 seconds.
   - [ ] Or, use StimulusJS fetch to handle it in JavaScript. Either way, confirm the job is actually canceled in the logs.
 
 - [ ] **5.4 Handle Job Completion**
@@ -233,8 +233,56 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 
 - [ ] **5.5 Verify Turbo Stream Responses**
   - [ ] Manually test in the browser. Enqueue a job → see the loading indicator → after job completes, see the new content appear.
-  - [ ] Cancel mid-way → see “canceled” partial.
+  - [ ] Cancel mid-way → see "canceled" partial.
   - [ ] Check logs that the job was indeed canceled or completed.
+
+---
+
+## 5A. Solid Cable Integration
+
+> While Turbo Streams handle basic updates, we'll use Solid Cable for more granular real-time progress updates.
+
+- [ ] **5A.1 Configure Solid Cable**
+
+  - [ ] Verify `solid_cable` gem is installed (included by default in Rails 8)
+  - [ ] Configure cable database in `config/database.yml`:
+    ```yaml
+    development:
+      cable:
+        <<: *default
+        database: storage/development_cable.sqlite3
+        migrations_paths: db/cable_migrate
+    ```
+  - [ ] Run `bin/rails db:prepare` to create cable database
+
+- [ ] **5A.2 Create Progress Channel**
+
+  - [ ] Generate channel: `bin/rails g channel CharacterProgress`
+  - [ ] Implement streaming updates in the job:
+    ```ruby
+    def broadcast_progress(message, percentage)
+      broadcast_to(
+        "character_progress_#{arguments.first}",
+        {
+          status: "processing",
+          message: message,
+          percentage: percentage
+        }
+      )
+    end
+    ```
+
+- [ ] **5A.3 Implement Client-Side Updates**
+
+  - [ ] Create Stimulus controller for progress updates
+  - [ ] Add progress bar and status message to view
+  - [ ] Handle connection/disconnection lifecycle
+  - [ ] Process incoming messages
+
+- [ ] **5A.4 Test Real-Time Updates**
+  - [ ] Verify progress updates appear in real-time
+  - [ ] Confirm messages are stored in cable database
+  - [ ] Test message cleanup after retention period
 
 ---
 
@@ -260,7 +308,7 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 - [ ] **7.1 Debounce the Submit Button**
 
   - [ ] Create a Stimulus controller (e.g., `debounce_controller.js`).
-  - [ ] Set a 300ms debounce so the user can’t spam the button to create multiple jobs simultaneously.
+  - [ ] Set a 300ms debounce so the user can't spam the button to create multiple jobs simultaneously.
 
 - [ ] **7.2 Add ARIA Live Regions**
 
@@ -293,8 +341,8 @@ This `todo.md` file merges two detailed plans into a single checklist. **We assu
 
 ### Additional Notes
 
-- **Integration Into Existing App**: These steps assume you can modify existing controllers and views. You’ll wrap previously synchronous logic (e.g., one-by-one content generation) inside background jobs and use Turbo Streams to update UI elements.
-- **Scaling & Production**: For large workloads, consider how many Solid Queue workers you’ll run, how you’ll scale concurrency, and any distributed caching for concurrency counters.
+- **Integration Into Existing App**: These steps assume you can modify existing controllers and views. You'll wrap previously synchronous logic (e.g., one-by-one content generation) inside background jobs and use Turbo Streams to update UI elements.
+- **Scaling & Production**: For large workloads, consider how many Solid Queue workers you'll run, how you'll scale concurrency, and any distributed caching for concurrency counters.
 - **Customize**: The concurrency limit, cancel flow, and session tracking can be adapted to your exact data model (e.g., referencing `current_user.id` or a specific multi-tenant approach).
 
 ---
