@@ -45,7 +45,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 # LLM Providers
-gem 'anthropic', '~> 0.1.0' # Claude API client
+gem 'anthropic', '~> 1.0.0' # Claude API client
 
 # Use dotenv for environment variables
 gem 'dotenv-rails'

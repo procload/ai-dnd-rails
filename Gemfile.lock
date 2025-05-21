@@ -87,9 +87,8 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    anthropic (0.1.0)
-      faraday (>= 1)
-      faraday-multipart (>= 1)
+    anthropic (1.0.0)
+      connection_pool
     ast (2.4.2)
     aws-eventstream (1.3.1)
     aws-partitions (1.1054.0)
@@ -149,14 +148,6 @@ GEM
     erubi (1.13.1)
     et-orbi (1.2.11)
       tzinfo
-    faraday (2.12.2)
-      faraday-net_http (>= 2.0, < 3.5)
-      json
-      logger
-    faraday-multipart (1.1.0)
-      multipart-post (~> 2.0)
-    faraday-net_http (3.4.0)
-      net-http (>= 0.5.0)
     ffi (1.17.1-aarch64-linux-gnu)
     ffi (1.17.1-aarch64-linux-musl)
     ffi (1.17.1-arm-linux-gnu)
@@ -201,7 +192,7 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
-    json (2.10.1)
+    json (2.12.0)
     kamal (2.5.2)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -218,7 +209,7 @@ GEM
     llhttp-ffi (0.5.0)
       ffi-compiler (~> 1.0)
       rake (~> 13.0)
-    logger (1.6.6)
+    logger (1.7.0)
     loofah (2.24.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -237,10 +228,7 @@ GEM
     mocha (2.7.1)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.8.0)
-    multipart-post (2.4.1)
     mustache (1.1.1)
-    net-http (0.6.0)
-      uri
     net-imap (0.5.6)
       date
       net-protocol
@@ -428,7 +416,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    uri (1.0.2)
+    uri (1.0.3)
     useragent (0.16.11)
     web-console (4.2.1)
       actionview (>= 6.0.0)
@@ -461,7 +449,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  anthropic (~> 0.1.0)
+  anthropic (~> 1.0.0)
   aws-sdk-s3
   bootsnap
   brakeman
